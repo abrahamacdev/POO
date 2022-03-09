@@ -13,6 +13,8 @@
 #include "vector"
 #include <algorithm>
 #include <cstdlib>
+#include <stdexcept>
+#include "iostream"
 
 
 class Cadena {
@@ -202,13 +204,13 @@ bool Cadena::operator==(const Cadena &c2) {
     return strcmp(s_, c2.s_) == 0;
 }
 bool Cadena::operator<(const Cadena &c2) {
-    return strcmp(s_, c2.s_) < 0;
+    return strcmp(s_, c2.s_) == -1;
 }
 bool Cadena::operator<=(const Cadena &c2) {
     return !(*this > c2);
 }
 bool Cadena::operator>(const Cadena &c2) {
-    return !(*this <= c2);
+    return strcmp(s_, c2.s_) == 1;
 }
 bool Cadena::operator>=(const Cadena &c2) {
     return !(*this < c2);

@@ -5,6 +5,7 @@
 #ifndef FECHA_FECHA_HPP
 #define FECHA_FECHA_HPP
 
+#include <climits>
 #include "ctime"
 #include "stdio.h"
 #include "cstring"
@@ -56,128 +57,128 @@ public:
     operator const char * ();
 
     // Errores
-    class FechaInvalida: public std::exception{
+    class Invalida: public std::exception{
 
         const char* porque;
 
     public:
 
-        FechaInvalida(): porque("Ni idea"){};
-        FechaInvalida(const char* p): porque(p){};
+        Invalida(): porque("Ni idea"){};
+        Invalida(const char* p): porque(p){};
 
-        const char* por_que(){
+        const char* por_que() const{
             return porque;
         }
     };
 
     class Utilidades {
 
-        public:
-            static int diaActual(){
-                std::time_t tiempo_calendario = std::time(nullptr);
-                std::tm* tiempo_descompuesto = std::localtime(&tiempo_calendario);
-                return tiempo_descompuesto->tm_mday;
-            }
+    public:
+        static int diaActual(){
+            std::time_t tiempo_calendario = std::time(nullptr);
+            std::tm* tiempo_descompuesto = std::localtime(&tiempo_calendario);
+            return tiempo_descompuesto->tm_mday;
+        }
 
-            static int mesActual(){
-                std::time_t tiempo_calendario = std::time(nullptr);
-                std::tm* tiempo_descompuesto = std::localtime(&tiempo_calendario);
-                return tiempo_descompuesto->tm_mon + 1;
-            }
+        static int mesActual(){
+            std::time_t tiempo_calendario = std::time(nullptr);
+            std::tm* tiempo_descompuesto = std::localtime(&tiempo_calendario);
+            return tiempo_descompuesto->tm_mon + 1;
+        }
 
-            static int anioActual(){
-                std::time_t tiempo_calendario = std::time(nullptr);
-                std::tm* tiempo_descompuesto = std::localtime(&tiempo_calendario);
-                return tiempo_descompuesto->tm_year + 1900;
-            }
+        static int anioActual(){
+            std::time_t tiempo_calendario = std::time(nullptr);
+            std::tm* tiempo_descompuesto = std::localtime(&tiempo_calendario);
+            return tiempo_descompuesto->tm_year + 1900;
+        }
 
-            static int maxDiaDelMes(int m, int y = anioActual()){
-                if(m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12)
-                    return 31;
-                else if(m == 4 || m == 6 || m == 9 || m == 11)
-                    return 30;
-                else {
-                    if(y % 4 == 0) {
-                        if(y % 100 == 0) {
-                            if(y % 400 == 0)
-                                return 29;
-                            return 28;
-                        }
-                        return 29;
+        static int maxDiaDelMes(int m, int y = anioActual()){
+            if(m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12)
+                return 31;
+            else if(m == 4 || m == 6 || m == 9 || m == 11)
+                return 30;
+            else {
+                if(y % 4 == 0) {
+                    if(y % 100 == 0) {
+                        if(y % 400 == 0)
+                            return 29;
+                        return 28;
                     }
-                    return 28;
+                    return 29;
                 }
+                return 28;
             }
+        }
 
-            static const char* mes2Texto(int m){
-                switch (m) {
-                    case 1:
-                        return "enero";
-                    case 2:
-                        return "febrero";
-                    case 3:
-                        return "marzo";
-                    case 4:
-                        return "abril";
-                    case 5:
-                        return "mayo";
-                    case 6:
-                        return "junio";
-                    case 7:
-                        return "julio";
-                    case 8:
-                        return "agosto";
-                    case 9:
-                        return "septiembre";
-                    case 10:
-                        return "octubre";
-                    case 11:
-                        return "noviembre";
-                    case 12:
-                        return "diciembre";
-                    default:
-                        return "";
-                }
+        static const char* mes2Texto(int m){
+            switch (m) {
+                case 1:
+                    return "enero";
+                case 2:
+                    return "febrero";
+                case 3:
+                    return "marzo";
+                case 4:
+                    return "abril";
+                case 5:
+                    return "mayo";
+                case 6:
+                    return "junio";
+                case 7:
+                    return "julio";
+                case 8:
+                    return "agosto";
+                case 9:
+                    return "septiembre";
+                case 10:
+                    return "octubre";
+                case 11:
+                    return "noviembre";
+                case 12:
+                    return "diciembre";
+                default:
+                    return "";
             }
+        }
 
-            static const char* diaSemana2Texto(const Fecha& f){
-                struct tm expire_time = {};
-                expire_time.tm_year = f.anio_ - 1900;
-                expire_time.tm_mon = f.mes_ - 1;
-                expire_time.tm_mday = f.dia_;
+        static const char* diaSemana2Texto(const Fecha& f){
+            struct tm expire_time = {};
+            expire_time.tm_year = f.anio_ - 1900;
+            expire_time.tm_mon = f.mes_ - 1;
+            expire_time.tm_mday = f.dia_;
 
-                time_t tempTime = mktime(&expire_time);
-                const std::tm * time_out = std::localtime(&tempTime);
+            time_t tempTime = mktime(&expire_time);
+            const std::tm * time_out = std::localtime(&tempTime);
 
-                int diaSemana = time_out->tm_wday;
+            int diaSemana = time_out->tm_wday;
 
-                switch (diaSemana) {
-                    case 0:
-                    case 7:
-                        return "domingo";
+            switch (diaSemana) {
+                case 0:
+                case 7:
+                    return "domingo";
 
-                    case 1:
-                        return "lunes";
+                case 1:
+                    return "lunes";
 
-                    case 2:
-                        return "martes";
+                case 2:
+                    return "martes";
 
-                    case 3:
-                        return "miércoles";
+                case 3:
+                    return "miércoles";
 
-                    case 4:
-                        return "jueves";
+                case 4:
+                    return "jueves";
 
-                    case 5:
-                        return "viernes";
+                case 5:
+                    return "viernes";
 
-                    case 6:
-                        return "sábado";
+                case 6:
+                    return "sábado";
 
-                    default:
-                        return "";
-                }
+                default:
+                    return "";
             }
+        }
     };
 
 private:
@@ -200,7 +201,7 @@ Fecha::Fecha(int d): mes_(Fecha::Utilidades::mesActual()), anio_(Fecha::Utilidad
     // Comprobamos que el día sea válido
     if (d == 0) dia_ = Fecha::Utilidades::diaActual();
     else if (diaValido(d, mes_)) dia_ = d;
-    else throw FechaInvalida{"Día no válido"};
+    else throw Invalida{"Día no válido"};
 }
 
 Fecha::Fecha(int d, int m): anio_(Fecha::Utilidades::anioActual()) {
@@ -208,12 +209,12 @@ Fecha::Fecha(int d, int m): anio_(Fecha::Utilidades::anioActual()) {
     // Comprobamos que el mes_ sea válido
     if (m == 0) mes_ = Fecha::Utilidades::mesActual();
     else if (mesValido(m)) mes_ = m;
-    else throw FechaInvalida{"Mes no válido"};
+    else throw Invalida{"Mes no válido"};
 
     // Comprobamos que el día sea válido
     if (d == 0) dia_ = Fecha::Utilidades::diaActual();
     else if (diaValido(d, m)) dia_ = d;
-    else throw FechaInvalida{"Día no válido"};
+    else throw Invalida{"Día no válido"};
 }
 
 Fecha::Fecha(int d, int m, int a) {
@@ -221,17 +222,17 @@ Fecha::Fecha(int d, int m, int a) {
     // Comprobamos que el mes_ sea válido
     if (m == 0) mes_ = Fecha::Utilidades::mesActual();
     else if (mesValido(m)) mes_ = m;
-    else throw FechaInvalida{"Mes no válido"};
+    else throw Invalida{"Mes no válido"};
 
     // Comprobamos que el día sea válido
     if (d == 0) dia_ = Fecha::Utilidades::diaActual();
     else if (diaValido(d,m)) dia_ = d;
-    else throw FechaInvalida{"Día no válido"};
+    else throw Invalida{"Día no válido"};
 
     // Comprobamos que el año sea válido
     if (a == 0) anio_ = Fecha::Utilidades::anioActual();
     else if (anioValido(a)) anio_ = a;
-    else throw FechaInvalida{"Año no válido"};
+    else throw Invalida{"Año no válido"};
 }
 
 Fecha::Fecha(const char* f) {
@@ -248,17 +249,17 @@ Fecha::Fecha(const char* f) {
     // Comprobamos que el mes_ sea válido
     if (m == 0) mes_ = Fecha::Utilidades::mesActual();
     else if (mesValido(m)) mes_ = m;
-    else throw FechaInvalida{"Mes no válido"};;
+    else throw Invalida{"Mes no válido"};;
 
     // Comprobamos que el día sea válido
     if (d == 0) dia_ = Fecha::Utilidades::diaActual();
     else if (diaValido(d,m)) dia_ = d;
-    else throw FechaInvalida{"Día no válido"};;
+    else throw Invalida{"Día no válido"};;
 
     // Comprobamos que el año sea válido
     if (a == 0) anio_ = Fecha::Utilidades::anioActual();
     else if (anioValido(a)) anio_ = a;
-    else throw FechaInvalida{"Año no válido"};;
+    else throw Invalida{"Año no válido"};;
 }
 // ---------------------
 
@@ -317,7 +318,7 @@ vector<vector<char>> Fecha::transformarFechaCadena(const char *f) {
     size_t longFecha = strlen(f);
 
     // La cadena mas corta posible solo puede ser x/x/xxxx
-    if (longFecha < 8) throw FechaInvalida{"Fecha demasiado corta"};
+    if (longFecha < 8) throw Invalida{"Fecha demasiado corta"};
 
     // Creamos un array que contenga tres vectores
     vector<char> datos[3] = {vector<char>{}, vector<char>{}, vector<char>{}};
@@ -335,19 +336,19 @@ vector<vector<char>> Fecha::transformarFechaCadena(const char *f) {
         if (arrIndx < 2){
 
             // No es un número ni '/'
-            if (!isdigit(actual) && actual != '/') throw FechaInvalida{"Caracteres no válidos"};
+            if (!isdigit(actual) && actual != '/') throw Invalida{"Caracteres no válidos"};
 
 
             // Es un dígito, hay que añadirlo
             if (isdigit(actual)) vectorActual->push_back(actual);
-            // Es '/', pasamos a buscar los datos del mes_|anio_
+                // Es '/', pasamos a buscar los datos del mes_|anio_
             else {
                 arrIndx++;
                 vectorActual = &datos[arrIndx];
             }
         }
 
-        // Estamos cogiendo el año
+            // Estamos cogiendo el año
         else {
 
             // Solo añadiremos números
@@ -367,19 +368,16 @@ vector<vector<char>> Fecha::transformarFechaCadena(const char *f) {
 }
 
 Cadena Fecha::dia2Cadena(){
-    Cadena d{2};
-
     if (dia_ < 10){
-        d[0] = '0';
-        d[1] = (char) dia_;
+        Cadena temp{1};
+        temp[0] = '0' + dia_;
+        return temp;
     }
-    else d[1] = (char) dia_;
-
-    cout << d << endl;
-
-    return d;
-
-
+    else {
+        char* numberstring = (char *) malloc((sizeof (int )) * INT16_MAX);
+        sprintf(numberstring, "%d", dia_);
+        return Cadena{numberstring};
+    }
 }
 Cadena Fecha::anio2Cadena(){
     return Cadena{to_string(anio_).c_str()};
@@ -398,13 +396,13 @@ Fecha& Fecha::operator+=(int d) {
 
     // No se puede representar la fecha
     if (-1 == mktime(&expire_time)){
-        throw FechaInvalida{"Número de días incorrecto"};
+        throw Invalida{"Número de días incorrecto"};
     }
 
     // Año no válido
     int tempAnio = expire_time.tm_year + 1900;
     if (tempAnio > Fecha::AnnoMaximo || tempAnio < Fecha::AnnoMinimo){
-        throw FechaInvalida{"El año resultante no es válido"};
+        throw Invalida{"El año resultante no es válido"};
     }
 
     dia_ = expire_time.tm_mday;
