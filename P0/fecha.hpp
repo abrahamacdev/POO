@@ -40,6 +40,8 @@ public:
     int anno() const;
 
     // Operadores
+    Fecha operator +(int d);
+    Fecha operator -(int d);
     Fecha& operator +=(int d);
     Fecha& operator -=(int d);
     Fecha operator ++(int d);        // Postfijo (f++ -> postincremento) {Devolvemos copia y sumamos}
@@ -386,6 +388,12 @@ Cadena Fecha::anio2Cadena(){
 
 
 // --- Operadores ---
+Fecha Fecha::operator+(int d) {
+    return Fecha(*this) += d;
+}
+Fecha Fecha::operator-(int d) {
+    return Fecha(*this) -= d;
+}
 Fecha& Fecha::operator+=(int d) {
 
     struct tm expire_time = {};

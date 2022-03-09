@@ -5,9 +5,10 @@ FUENTES = test-fechacadena-consola.cpp
 OBJETOS = test-fechacadena-consola.o
 NOMBRE_EJECUTABLE = programa
 
-
 CPPFLAGS = -DP0 -I../Tests-auto -I
 VPATH = ../Tests-auto:.
+
+
 
 all: programa
 

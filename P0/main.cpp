@@ -4,7 +4,7 @@
 int main() {
 
     Fecha f;
-    Cadena c;
+    cout << f - 14 << endl;
 
     return 0;
 }
