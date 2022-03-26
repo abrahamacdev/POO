@@ -3,8 +3,8 @@
 
 int main() {
 
-    Fecha f;
-    cout << f - 14 << endl;
+    const Fecha f(29, 2, 2000);
+    cout << f << endl;
 
     return 0;
 }
