@@ -68,7 +68,7 @@ Cadena::Cadena(const char* a) {
 
 //  --- Observadores ---
 const char& Cadena::at(size_t i) const {
-    if (i < 0 || i > tam_ - 1) throw std::out_of_range("Índice no válido");
+    if (i < 0 || tam_ == 0) throw std::out_of_range("Índice no válido");
     return s_[i];
 }
 char& Cadena::at(size_t i) {
@@ -166,13 +166,13 @@ bool Cadena::operator==(const Cadena &c2) {
     return strcmp(s_, c2.s_) == 0;
 }
 bool Cadena::operator<(const Cadena &c2) {
-    return strcmp(s_, c2.s_) == -1;
+    return strcmp(s_, c2.s_) <= -1;
 }
 bool Cadena::operator<=(const Cadena &c2) {
     return !(*this > c2);
 }
 bool Cadena::operator>(const Cadena &c2) {
-    return strcmp(s_, c2.s_) == 1;
+    return strcmp(s_, c2.s_) >= 1;
 }
 bool Cadena::operator>=(const Cadena &c2) {
     return !(*this < c2);

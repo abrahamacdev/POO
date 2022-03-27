@@ -167,6 +167,9 @@ Fecha::Fecha(const char* f) {
     vector<char>& vecMes = fechaPorTrozos.at(1);
     vector<char>& vecAnio = fechaPorTrozos.at(2);
 
+    // Cadena demasiado corta
+    if (vecAnio.empty()) throw Fecha::Invalida("Falta el año");
+
     int d = stoi(string{vecDia.begin(), vecDia.end()});
     int m = stoi(string{vecMes.begin(), vecMes.end()});
     int a = stoi(string{vecAnio.begin(), vecAnio.end()});
@@ -356,20 +359,20 @@ Fecha& Fecha::operator-=(int d) {
     return *this;
 }
 Fecha Fecha::operator++(int d) {
-    Fecha temp{*this};
-    *this += 1;
-    return temp;
+    Fecha tmp(*this);
+    operator++(); // prefix-increment this instance
+    return tmp;   // return value before increment
 }
 Fecha Fecha::operator--(int d) {
-    Fecha& f{*this};
-    *this -= 1;
-    return f;
+    Fecha tmp(*this);
+    operator--(); // prefix-increment this instance
+    return tmp;   // return value before increment
 }
-Fecha Fecha::operator++() {
+Fecha& Fecha::operator++() {
     *this += 1;
     return *this;
 }
-Fecha Fecha::operator--() {
+Fecha& Fecha::operator--() {
     *this -= 1;
     return *this;
 }

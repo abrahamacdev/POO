@@ -48,8 +48,8 @@ public:
     Fecha& operator -=(int d);
     Fecha operator ++(int d);        // Postfijo (f++ -> postincremento) {Devolvemos copia y sumamos}
     Fecha operator --(int d);        // Postfijo (f-- -> postdecremento) {Devolvemos copia y restamos}
-    Fecha operator ++();            // Prefijo (++f -> preincremento) {Sumamos y devolvemos el mismo}
-    Fecha operator --();            // Prefijo (--f -> predecremento) {Sumamos y devolvemos el mismo}
+    Fecha& operator ++();            // Prefijo (++f -> preincremento) {Sumamos y devolvemos el mismo}
+    Fecha& operator --();            // Prefijo (--f -> predecremento) {Sumamos y devolvemos el mismo}
     bool operator==(const Fecha& f2) const;
     bool operator<(const Fecha& f2) const;
     bool operator>(const Fecha& f2) const;

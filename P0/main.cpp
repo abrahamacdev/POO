@@ -3,8 +3,8 @@
 
 int main() {
 
-    const Fecha f(29, 2, 2000);
-    cout << f << endl;
+    const Cadena a;
+    cout << a.at(0) << endl;
 
     return 0;
 }
