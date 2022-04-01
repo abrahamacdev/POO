@@ -24,20 +24,16 @@ public:
     static const int AnnoMaximo = 2037;
 
     // Contructores
-    Fecha();
-    //Fecha(const Fecha& f);
-    explicit Fecha(int d);
-    Fecha(int d, int m);
-    Fecha(int d, int m, int a);
+    explicit Fecha(int d = 0, int m = 0, int a = 0);
     Fecha(const char* f);
 
     // Auxiliares
-    void imprimir() const;
+    void imprimir() const noexcept;
 
     // Observadores
-    int dia() const;
-    int mes() const;
-    int anno() const;
+    inline int dia() const noexcept { return dia_; }
+    inline int mes() const noexcept { return mes_; }
+    inline int anno() const noexcept { return anio_; }
 
     // Operadores
     Fecha operator +(int d);
@@ -97,6 +93,7 @@ private:
     static bool diaValido(int d, int m, int y = Utilidades::anioActual());
     static bool mesValido(int m);
     static bool anioValido(int a);
+    void validar();
     vector<vector<char>> transformarFechaCadena(const char* f);
     Cadena dia2Cadena() const;
     Cadena anio2Cadena() const;

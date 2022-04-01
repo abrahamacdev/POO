@@ -117,96 +117,43 @@ const char *Fecha::Invalida::what() const throw() {
 
 
 // --- Constructores ---
-Fecha::Fecha(): dia_(Fecha::Utilidades::diaActual()), mes_(Fecha::Utilidades::mesActual()), anio_(Fecha::Utilidades::anioActual()) {}
-
-//Fecha::Fecha(const Fecha &f): dia_(f.dia_), mes_(f.mes_), anio_(f.anio_){};
-
-Fecha::Fecha(int d): mes_(Fecha::Utilidades::mesActual()), anio_(Fecha::Utilidades::anioActual()){
-
-    // Comprobamos que el día sea válido
-    if (d == 0) dia_ = Fecha::Utilidades::diaActual();
-    else if (diaValido(d, mes_)) dia_ = d;
-    else throw Invalida{"Día no válido"};
-}
-
-Fecha::Fecha(int d, int m): anio_(Fecha::Utilidades::anioActual()) {
-
-    // Comprobamos que el mes_ sea válido
-    if (m == 0) mes_ = Fecha::Utilidades::mesActual();
-    else if (mesValido(m)) mes_ = m;
-    else throw Invalida{"Mes no válido"};
-
-    // Comprobamos que el día sea válido
-    if (d == 0) dia_ = Fecha::Utilidades::diaActual();
-    else if (diaValido(d, mes_)) dia_ = d;
-    else throw Invalida{"Día no válido"};
-}
-
-Fecha::Fecha(int d, int m, int a) {
-
-    // Comprobamos que el mes_ sea válido
-    if (m == 0) mes_ = Fecha::Utilidades::mesActual();
-    else if (mesValido(m)) mes_ = m;
-    else throw Invalida{"Mes no válido"};
-
-    // Comprobamos que el año sea válido
-    if (a == 0) anio_ = Fecha::Utilidades::anioActual();
-    else if (anioValido(a)) anio_ = a;
-    else throw Invalida{"Año no válido"};
-
-    // Comprobamos que el día sea válido
-    if (d == 0) dia_ = Fecha::Utilidades::diaActual();
-    else if (diaValido(d,mes_,anio_)) dia_ = d;
-    else throw Invalida{"Día no válido"};
+Fecha::Fecha(int d, int m, int a): dia_(d), mes_(m), anio_(a) {
+    validar();
 }
 
 Fecha::Fecha(const char* f) {
-    vector<vector<char>> fechaPorTrozos = transformarFechaCadena(f);
 
-    vector<char>& vecDia = fechaPorTrozos.at(0);
-    vector<char>& vecMes = fechaPorTrozos.at(1);
-    vector<char>& vecAnio = fechaPorTrozos.at(2);
+    int dia, mes, anio;
 
-    // Cadena demasiado corta
-    if (vecAnio.empty()) throw Fecha::Invalida("Falta el año");
+    if(sscanf(f, "%d/%d/%d", &dia, &mes, &anio) != 3) throw Invalida("Fecha incorrecta");
+    else{
+        dia_ = dia;
+        mes_ = mes;
+        anio_ = anio;
 
-    int d = stoi(string{vecDia.begin(), vecDia.end()});
-    int m = stoi(string{vecMes.begin(), vecMes.end()});
-    int a = stoi(string{vecAnio.begin(), vecAnio.end()});
+        validar();
+    }
+}
+
+void Fecha::validar() {
 
     // Comprobamos que el mes_ sea válido
-    if (m == 0) mes_ = Fecha::Utilidades::mesActual();
-    else if (mesValido(m)) mes_ = m;
-    else throw Invalida{"Mes no válido"};;
-
-    // Comprobamos que el día sea válido
-    if (d == 0) dia_ = Fecha::Utilidades::diaActual();
-    else if (diaValido(d,mes_)) dia_ = d;
-    else throw Invalida{"Día no válido"};;
+    if (mes_ == 0) mes_ = Fecha::Utilidades::mesActual();
+    else if (!mesValido(mes_)) throw Invalida{"Mes no válido"};
 
     // Comprobamos que el año sea válido
-    if (a == 0) anio_ = Fecha::Utilidades::anioActual();
-    else if (anioValido(a)) anio_ = a;
-    else throw Invalida{"Año no válido"};;
+    if (anio_ == 0) anio_ = Fecha::Utilidades::anioActual();
+    else if (!anioValido(anio_)) throw Invalida{"Año no válido"};
+
+    // Comprobamos que el día sea válido
+    if (dia_ == 0) dia_ = Fecha::Utilidades::diaActual();
+    else if (!diaValido(dia_,mes_,anio_)) throw Invalida{"Día no válido"};
 }
 // ---------------------
 
 
-// --- Observadores ---
-int Fecha::dia() const {
-    return dia_;
-}
-int Fecha::mes() const {
-    return mes_;
-}
-int Fecha::anno() const {
-    return anio_;
-}
-// --------------------
-
-
 // --- Auxiliar ---
-void Fecha::imprimir() const {
+void Fecha::imprimir() const noexcept{
 
     Cadena d{2}, m{2}, a{};
 
@@ -331,26 +278,18 @@ Fecha Fecha::operator-(int d) const {
 }
 Fecha& Fecha::operator+=(int d) {
 
-    struct tm expire_time = {};
-    expire_time.tm_year = anio_ - 1900;
-    expire_time.tm_mon = mes_ - 1;
-    expire_time.tm_mday = dia_ + d;
-    //expire_time.tm_mday += d;
+    struct tm fechaTM = {};
+    fechaTM.tm_year = anio_ - 1900;
+    fechaTM.tm_mon = mes_ - 1;
+    fechaTM.tm_mday = dia_ + d;
 
-    // No se puede representar la fecha
-    if (-1 == mktime(&expire_time)){
-        throw Invalida{"Número de días incorrecto"};
-    }
+    mktime(&fechaTM);
 
-    // Año no válido
-    int tempAnio = expire_time.tm_year + 1900;
-    if (tempAnio > Fecha::AnnoMaximo || tempAnio < Fecha::AnnoMinimo){
-        throw Invalida{"El año resultante no es válido"};
-    }
+    dia_ = fechaTM.tm_mday;
+    mes_ = fechaTM.tm_mon + 1;
+    anio_ = fechaTM.tm_year + 1900;
 
-    dia_ = expire_time.tm_mday;
-    mes_ = expire_time.tm_mon + 1;
-    anio_ = expire_time.tm_year + 1900;
+    validar();
 
     return *this;
 }
@@ -360,21 +299,19 @@ Fecha& Fecha::operator-=(int d) {
 }
 Fecha Fecha::operator++(int d) {
     Fecha tmp(*this);
-    operator++(); // prefix-increment this instance
-    return tmp;   // return value before increment
+    *this += 1;
+    return tmp;
 }
 Fecha Fecha::operator--(int d) {
     Fecha tmp(*this);
-    operator--(); // prefix-increment this instance
-    return tmp;   // return value before increment
+    *this += -1;
+    return tmp;
 }
 Fecha& Fecha::operator++() {
-    *this += 1;
-    return *this;
+    return *this += 1;
 }
 Fecha& Fecha::operator--() {
-    *this -= 1;
-    return *this;
+    return  *this -= 1;
 }
 bool Fecha::operator==(const Fecha& f2) const {
     return dia_ == f2.dia_ && mes_ == f2.mes_ && anio_ == f2.anio_;

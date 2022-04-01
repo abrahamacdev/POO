@@ -38,36 +38,33 @@ Cadena Cadena::Utilidades::numero2Cadena(int n){
 // --------------------------
 
 // --- Constructores ---
-Cadena::Cadena(): s_(new char[1]()), tam_(0) {
-    s_[0] = '\0';    // Caracter final
-}
-Cadena::Cadena(unsigned int tamanio, const char  relleno): s_(new char[tamanio+1]()), tam_(tamanio) {
-    for (unsigned int i=0; i < tamanio; i++){
-        s_[i] = relleno;
+Cadena::Cadena(size_t tamanio, char relleno): tam_(tamanio) {
+
+    // Reservamos memoria para la cadena
+    s_ = new char[tam_+1] ;
+
+    // LLenamos la cadena con el caracter de relleno
+    for(size_t i = 0 ; i < tamanio ; ++i){
+        s_[i] = relleno ;
     }
-    s_[tamanio] = '\0';     // Caracter final
+
+    // Añadimos el caracter final
+    s_[tam_] = '\0' ;
 }
-Cadena::Cadena(unsigned int tamanio): s_(new char[tamanio+1]()), tam_(tamanio) {
-    for (unsigned int i=0; i < tamanio; i++){
-        s_[i] = ' ';
-    }
-    s_[tamanio] = '\0';     // Caracter final
-}
-Cadena::Cadena(const Cadena &c) {
-    s_ = new char[c.tam_ + 1]();
+Cadena::Cadena(const Cadena &c): tam_(c.tam_){
+    s_ = new char[c.tam_ + 1];
     strcpy(s_, c.s_);
-    tam_ = c.tam_;
 }
 Cadena::Cadena(const char* a) {
     tam_ = strlen(a);
-    s_ = new char[tam_ + 1]();
+    s_ = new char[tam_ + 1];
     strcpy(s_, a);
 }
 // ---------------------
 
 
 //  --- Observadores ---
-const char& Cadena::at(size_t i) const {
+char Cadena::at(size_t i) const {
     if (i < 0 || tam_ == 0) throw std::out_of_range("Índice no válido");
     return s_[i];
 }
@@ -111,29 +108,36 @@ Cadena Cadena::substr(unsigned int indx, unsigned int tam) const {
 // ---------------------
 
 
-// --- Operadores --
+// --- Operadores --new
 Cadena& Cadena::operator=(const Cadena &c2) {
 
-    // Comprobamos que nos sea la misma instancia
     if (this != &c2){
 
-        // Eliminamos los datos de la cadena actual
-        eliminar();
+        // ELiminamos la cadena actual
+        delete[] this->s_ ;
 
-        // Copiamos el tamaño y el contenido
-        tam_ = c2.tam_;
-        s_ = new char[c2.tam_ + 1]();
-        strcpy(s_, c2.s_);
+        // Reservamos memoria para la nueva cadena y su tamaño
+        this->tam_ = strlen(c2) ;
+        this->s_ = new char[tam_ +1] ;
+
+        // Copiamos el contenido de la cadena
+        strcpy(this->s_,c2.s_) ;
     }
 
     return *this;
 }
 Cadena& Cadena::operator=(const char* c2){
-    eliminar();
 
-    tam_ = strlen(c2);
-    s_ = new char[tam_ + 1];
-    strcpy(s_, c2);
+    // ELiminamos la cadena actual
+    delete[] this->s_ ;
+
+    // Reservamos memoria para la nueva cadena y su tamaño
+    this->tam_ = strlen(c2) ;
+    this->s_ = new char[tam_ +1] ;
+
+    // Copiamos el contenido de la cadena
+    strcpy(this->s_,c2) ;
+    return *this;
 }
 Cadena& Cadena::operator +=(const Cadena& c2){
 
@@ -199,11 +203,6 @@ Cadena::operator const char *() const {
 }
 // -----------------
 
-
-void Cadena::eliminar() {
-    delete[] s_;
-}
-
 Cadena::~Cadena() {
-    eliminar();
+    delete[] s_;
 }

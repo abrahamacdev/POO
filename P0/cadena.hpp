@@ -20,20 +20,18 @@
 class Cadena {
 
     char* s_;
-    unsigned int tam_;
+    size_t tam_;
 
 public:
 
     // Constructores
-    Cadena();
-    Cadena(unsigned int tamanio, const char relleno);
-    explicit Cadena(unsigned int tamanio);
-    Cadena(const Cadena& c);
-    Cadena(const char* a);
+    explicit Cadena(size_t tamanio = 0, char relleno = ' ');    // Cto defecto, 1 párametro y 2 parámetros
+    Cadena(const Cadena& c);                                    // Cto copia
+    Cadena(const char* a);                                      // Cto cadena
 
     // Observadores
-    unsigned int length() const { return tam_; };
-    const char& at(size_t i) const;
+    inline size_t length() const noexcept { return tam_; };
+    char at(size_t i) const;
     char& at(size_t i);
     Cadena substr(unsigned int indx, unsigned int tam);
     Cadena substr(unsigned int indx, unsigned int tam) const;
@@ -67,9 +65,6 @@ public:
         static Cadena vector2Cadena(std::vector<char>& v);
         static Cadena numero2Cadena(int n);
     };
-
-private:
-    void eliminar();
 };
 
 #endif //FECHA_CADENA_HPP
