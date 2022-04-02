@@ -3,8 +3,6 @@
 //
 
 #include "cadena.hpp"
-#include "../P1/cadena.hpp"
-
 
 // --- Cadena::Utilidades ---
 Cadena Cadena::Utilidades::vector2Cadena(std::vector<char>& v){
@@ -57,10 +55,13 @@ Cadena::Cadena(const Cadena &c): tam_(c.tam_){
     s_ = new char[c.tam_ + 1];
     strcpy(s_, c.s_);
 }
-Cadena::Cadena(const char* a) {
-    tam_ = strlen(a);
+Cadena::Cadena(const char* a): tam_(strlen(a)) {
     s_ = new char[tam_ + 1];
     strcpy(s_, a);
+}
+Cadena::Cadena(Cadena&& c2): s_(c2.s_), tam_(c2.tam_) {
+    c2.s_ = nullptr;
+    c2.tam_ = 0;
 }
 // ---------------------
 
@@ -107,10 +108,13 @@ Cadena Cadena::substr(unsigned int indx, unsigned int tam) const {
 
     return nueva;
 }
+const char *Cadena::c_str() const noexcept {
+    return s_;
+}
 // ---------------------
 
 
-// --- Operadores --new
+// --- Operadores ---
 Cadena& Cadena::operator=(const Cadena &c2) {
 
     if (this != &c2){
@@ -119,7 +123,7 @@ Cadena& Cadena::operator=(const Cadena &c2) {
         delete[] this->s_ ;
 
         // Reservamos memoria para la nueva cadena y su tamaño
-        this->tam_ = strlen(c2) ;
+        this->tam_ = strlen(c2.s_) ;
         this->s_ = new char[tam_ +1] ;
 
         // Copiamos el contenido de la cadena
@@ -141,6 +145,17 @@ Cadena& Cadena::operator=(const char* c2){
     strcpy(this->s_,c2) ;
     return *this;
 }
+Cadena& Cadena::operator=(Cadena&& c2)  noexcept {
+
+    // Nos asignamos los valores de los atributos de c2
+    this->tam_ = c2.tam_;
+    this->s_ = c2.s_;
+
+    c2.tam_ = 0;
+    c2.s_ = nullptr;        // Importante para evitar errores con nuestra cadena
+
+    return *this;
+}
 Cadena& Cadena::operator +=(const Cadena& c2){
 
     char* temp = new char[tam_ + c2.tam_ + 1]();
@@ -153,38 +168,26 @@ Cadena& Cadena::operator +=(const Cadena& c2){
 
     return *this;
 }
-Cadena Cadena::operator+(const Cadena &c2) {
-
-    char* temp = new char[tam_ + c2.tam_ + 1];
-    strcpy(temp, s_);
-    strcat(temp, c2.s_);
-
-    return Cadena{temp};
+Cadena operator+(const Cadena &c1, const Cadena &c2) {
+    return Cadena(c1) += c2;
 }
-Cadena Cadena::operator+(const Cadena &c2) const {
-    char* temp = new char[tam_ + c2.tam_ + 1];
-    strcpy(temp, s_);
-    strcat(temp, c2.s_);
-
-    return Cadena{temp};
+bool operator==(const Cadena &c1, const Cadena &c2) {
+    return strcmp(c1.c_str(), c2.c_str()) == 0;
 }
-bool Cadena::operator==(const Cadena &c2) {
-    return strcmp(s_, c2.s_) == 0;
+bool operator<(const Cadena &c1, const Cadena &c2) {
+    return strcmp(c1.c_str(), c2.c_str()) <= -1;
 }
-bool Cadena::operator<(const Cadena &c2) {
-    return strcmp(s_, c2.s_) <= -1;
+bool operator<=(const Cadena &c1, const Cadena &c2) {
+    return !(c1 > c2);
 }
-bool Cadena::operator<=(const Cadena &c2) {
-    return !(*this > c2);
+bool operator>(const Cadena &c1, const Cadena &c2) {
+    return strcmp(c1.c_str(), c2.c_str()) >= 1;
 }
-bool Cadena::operator>(const Cadena &c2) {
-    return strcmp(s_, c2.s_) >= 1;
+bool operator>=(const Cadena &c1, const Cadena &c2) {
+    return !(c1 < c2);
 }
-bool Cadena::operator>=(const Cadena &c2) {
-    return !(*this < c2);
-}
-bool Cadena::operator!=(const Cadena &c2) {
-    return !(*this == c2);
+bool operator!=(const Cadena &c1, const Cadena &c2) {
+    return !(c1 == c2);
 }
 char& Cadena::operator[](unsigned int i) {
     return s_[i];
@@ -192,16 +195,32 @@ char& Cadena::operator[](unsigned int i) {
 const char& Cadena::operator[](unsigned int i) const {
     return s_[i];
 }
-// -----------------
-
-
-// --- Conversor ---
-Cadena::operator const char *() {
-    return s_;
+std::ostream& operator << (std::ostream& s, const Cadena& c){
+    return s << c.c_str();
 }
+std::istream& operator >> (std::istream& s, Cadena& c){
 
-Cadena::operator const char *() const {
-    return s_;
+    // Buscamos la primera letra de la linea
+    for (int i = 0; i < 32 && isspace(s.peek()); ++i && s.get());
+
+    // Vamos cogiendo los caracteres para formar la palabra
+    char* tempString = new char[32];
+    int i = 0;
+    while(s.good() && !isspace(s.peek()) && i < 32){
+        tempString[i++] = (char) s.get();
+    }
+    tempString[i]='\0';                 // Añadimos el caracter final
+
+    // Creamos una cadena con los caracteres justos y copiamos el contenido de la temporal
+    char* cadenaFinal = new char[strlen(tempString)];
+    strcpy(cadenaFinal, tempString);
+    c = Cadena{cadenaFinal};
+
+    // Eliminamos las cadenas temporales
+    delete[] tempString;
+    delete[] cadenaFinal;
+
+    return s;
 }
 // -----------------
 

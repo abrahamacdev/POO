@@ -2,7 +2,7 @@
 // Created by poo on 26/3/22.
 //
 
-#include "fecha.hpp"
+#include "./fecha.hpp"
 
 // --- Fecha::Utilidades ---
 int Fecha::Utilidades::diaActual(){
@@ -169,9 +169,9 @@ void Fecha::imprimir() const noexcept{
     }
     else m[1] = (char) mes_;
 
-    a = to_string(anio_).c_str();
+    a = std::to_string(anio_).c_str();
 
-    cout << d << "/" << m << "/" << a << endl;
+    std::cout << d << "/" << m << "/" << a << std::endl;
 }
 
 bool Fecha::diaValido(int d, int m, int y){
@@ -201,7 +201,7 @@ Cadena Fecha::dia2Cadena() const{
     }
 }
 Cadena Fecha::anio2Cadena() const{
-    return Cadena{to_string(anio_).c_str()};
+    return Cadena{std::to_string(anio_).c_str()};
 }
 // -----------------
 
@@ -256,43 +256,70 @@ Fecha& Fecha::operator++() {
 Fecha& Fecha::operator--() {
     return  *this -= 1;
 }
-bool Fecha::operator==(const Fecha& f2) const {
-    return dia_ == f2.dia_ && mes_ == f2.mes_ && anio_ == f2.anio_;
+bool operator==(const Fecha& f1, const Fecha& f2) {
+    return f1.anno() == f2.anno() && f1.mes() == f2.mes() && f1.dia() == f2.dia();
 }
-bool Fecha::operator<(const Fecha& f2) const{
+bool operator<(const Fecha& f1, const Fecha& f2) {
 
     // Comparamos los años
-    if (anio_ > f2.anio_) return false;       // Nuestro año es mayor que el otro
-    else if (anio_ < f2.anio_) return true;   // Su año es mayor que el nuestro
+    if (f1.anno() > f2.anno()) return false;       // Nuestro año es mayor que el otro
+    else if (f1.anno() < f2.anno()) return true;   // Su año es mayor que el nuestro
     else {                                  // Tenemos el mismo año
 
         // Comparamos los años
-        if (mes_ > f2.mes_) return false;     // Nuestro mes_ es mayor que el otro
-        else if (mes_ < f2.mes_) return true; // Su mes_ es mayor que el nuestro
+        if (f1.mes() > f2.mes()) return false;     // Nuestro mes_ es mayor que el otro
+        else if (f1.mes() < f2.mes()) return true; // Su mes_ es mayor que el nuestro
         else {                              // Tenemos el mismo mes_
 
             // Comparamos los días
-            return dia_ < f2.dia_;
+            return f1.dia() < f2.dia();
         }
     }
 }
-bool Fecha::operator>(const Fecha& f2) const {
-    return f2 < *this;
+bool operator>(const Fecha& f1, const Fecha& f2) {
+    if(f1.anno() > f2.anno()) return true;
+    else if (f1.anno() == f2.anno()){
+        if (f1.mes() > f2.mes()) return true;
+        else if (f1.mes() == f2.mes() && f1.dia() > f2.dia()) return true;
+    }
+    return false;
 }
-bool Fecha::operator<=(const Fecha &f2) const {
-    return !(f2 < *this);
+bool operator<=(const Fecha& f1, const Fecha &f2)  {
+    return !(f1 > f2);
 }
-bool Fecha::operator>=(const Fecha &f2) const {
-    return !(*this < f2);
+bool operator>=(const Fecha& f1, const Fecha &f2) {
+    return !(f1 < f2);
 }
-bool Fecha::operator!=(const Fecha &f2) const {
-    return !(*this == f2);
+bool operator!=(const Fecha& f1, const Fecha &f2) {
+    return !(f1 == f2);
+}
+std::ostream& operator <<(std::ostream& s, const Fecha& f){
+    return s << f.cadena();
+}
+std::istream& operator >>(std::istream& s, Fecha& f){
+
+    // Leemos 11 caracteres del flujo
+    char* sTemporal = new char[11];
+    s.getline(sTemporal, 11);
+
+    try {
+
+        f = Fecha{sTemporal};
+
+    }catch (Fecha::Invalida& f){
+
+        // Marcamos el flujo de entrada con el estado de fallo (fail) y propagamos el error
+        s.setstate(std::ios_base::failbit);
+        throw f;
+    }
+
+    return s;
 }
 // ------------------
 
 
-// --- Conversores ---
-Fecha::operator const char * () {
+// --- Observadores ---
+const char* Fecha::cadena() const noexcept {
     Cadena temp;
 
     Cadena espacio{" "};
@@ -307,26 +334,7 @@ Fecha::operator const char * () {
     temp += anio2Cadena();
 
     char* c = new char[temp.length()+1];
-    strcpy(c, temp);
-
-    return c;
-}
-Fecha::operator const char *() const {
-    Cadena temp;
-
-    Cadena espacio{" "};
-    Cadena de{" de "};
-
-    temp = Cadena{Fecha::Utilidades::diaSemana2Texto(*this)};
-    temp += espacio;
-    temp += dia2Cadena();
-    temp += de;
-    temp += Cadena{Fecha::Utilidades::mes2Texto(mes_)};
-    temp+= de;
-    temp += anio2Cadena();
-
-    char* c = new char[temp.length()+1];
-    strcpy(c, temp);
+    strcpy(c, temp.c_str());
 
     return c;
 }

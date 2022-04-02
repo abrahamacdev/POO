@@ -10,8 +10,7 @@
 #include "stdio.h"
 #include "cstring"
 #include "cadena.hpp"
-
-using namespace std;
+#include "iostream"
 
 class Fecha {
 
@@ -33,6 +32,7 @@ public:
     inline int dia() const noexcept { return dia_; }
     inline int mes() const noexcept { return mes_; }
     inline int anno() const noexcept { return anio_; }
+    const char* cadena() const noexcept;
 
     // Operadores
     Fecha operator +(int d);
@@ -45,16 +45,7 @@ public:
     Fecha operator --(int d);        // Postfijo (f-- -> postdecremento) {Devolvemos copia y restamos}
     Fecha& operator ++();            // Prefijo (++f -> preincremento) {Sumamos y devolvemos el mismo}
     Fecha& operator --();            // Prefijo (--f -> predecremento) {Sumamos y devolvemos el mismo}
-    bool operator==(const Fecha& f2) const;
-    bool operator<(const Fecha& f2) const;
-    bool operator>(const Fecha& f2) const;
-    bool operator<=(const Fecha& f2) const;
-    bool operator>=(const Fecha& f2) const;
-    bool operator!=(const Fecha& f2) const;
 
-    // Conversores
-    operator const char * ();
-    operator const char * () const;
 
     // Errores
     class Invalida: public std::exception{
@@ -96,5 +87,14 @@ private:
     Cadena dia2Cadena() const;
     Cadena anio2Cadena() const;
 };
+
+bool operator ==(const Fecha& f1, const Fecha& f2);
+bool operator !=(const Fecha& f1, const Fecha& f2);
+bool operator >(const Fecha& f1, const Fecha& f2);
+bool operator >=(const Fecha& f1, const Fecha& f2);
+bool operator <(const Fecha& f1, const Fecha& f2);
+bool operator <=(const Fecha& f1, const Fecha& f2);
+std::ostream& operator << (std::ostream& s, const Fecha& f);      // Operación de extracción
+std::istream& operator >> (std::istream& s, Fecha& f);            // Operación de insercción
 
 #endif //FECHA_FECHA_HPP
