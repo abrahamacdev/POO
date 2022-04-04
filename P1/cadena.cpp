@@ -206,7 +206,7 @@ std::istream& operator >> (std::istream& s, Cadena& c){
     // Vamos cogiendo los caracteres para formar la palabra
     char* tempString = new char[32];
     int i = 0;
-    while(s.good() && !isspace(s.peek()) && i < 32){
+    while(s.good() && !isspace(s.peek()) && i < 32 && s.peek() != EOF){
         tempString[i++] = (char) s.get();
     }
     tempString[i]='\0';                 // Añadimos el caracter final

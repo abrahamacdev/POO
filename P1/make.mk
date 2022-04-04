@@ -6,7 +6,7 @@ LDFLAGS = -I$(TESTS_DIR)
 VPATH = ../Tests-auto:.
 
 TESTS_DIR = ../Tests-auto/
-EJECUTABLES = test-P1-auto testfechacadena-consola
+EJECUTABLES = test-P1-auto testfechacadena-consola check
 
 all: $(EJECUTABLES)
 
@@ -20,13 +20,18 @@ test-fechacadena-consola.o: test-fechacadena-consola.cpp fecha.hpp cadena.hpp
 
 # Crea el ejecutable de los tests automáticos
 test-P1-auto: test-caso0-cadena-auto.o test-caso0-fecha-auto.o test-auto.o cadena.o fecha.o
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
 
 # Compila el código fuente del test automático
 test-caso0-fecha-auto.o test-caso0-cadena-auto.o test-auto.o: \
 	test-caso0-fecha-auto.cpp test-caso0-cadena-auto.cpp \
 	test-auto.cpp test-auto.hpp fecha.hpp cadena.hpp
-#$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)test-caso0-fecha-auto.cpp $(TESTS_DIR)test-caso0-cadena-auto.cpp $(TESTS_DIR)test-auto.cpp
+
+fecha_cadena_check: fecha_cadena_check.cpp
+	make -f Make_check.mk
+
+check: fecha_cadena_check
+	./fecha_cadena_check cadena.cpp fecha.cpp -- -std=${STD}
 
 # Compilación de la clase fecha
 fecha.o: fecha.hpp cadena.hpp
@@ -36,5 +41,17 @@ fecha.o: fecha.hpp cadena.hpp
 cadena.o: cadena.hpp
 	$(CXX) $(CXXFLAGS) -c cadena.cpp
 
+main: main.o fecha.o cadena.o
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+main.o: main.cpp cadena.hpp fecha.hpp
+	$(CXX) $(CXXFLAGS) -c main.cpp
+
+clean-main: clean
+	rm -rf main
+
 clean:
-	rm -rf *.o core *~ $(EJECUTABLES)
+	rm -rf *.o core *~
+
+clean-all:
+	rm -rf *.o core *~ $(EJECUTABLES) main fecha_cadena_check
