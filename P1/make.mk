@@ -6,7 +6,7 @@ LDFLAGS = -I$(TESTS_DIR)
 VPATH = ../Tests-auto:.
 
 TESTS_DIR = ../Tests-auto/
-EJECUTABLES = test-P1-auto testfechacadena-consola check
+EJECUTABLES = test-P1-auto testfechacadena-consola #check
 
 all: $(EJECUTABLES)
 

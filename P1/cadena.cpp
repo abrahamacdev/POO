@@ -86,7 +86,6 @@ Cadena Cadena::substr(unsigned int indx, unsigned int tam) {
 
     Cadena nueva{tam};
     for (unsigned int i = indx; i < indx + tam; ++i) {
-        char c = s_[i + indx];
         nueva[i - indx] = s_[i];
     }
 
@@ -102,7 +101,6 @@ Cadena Cadena::substr(unsigned int indx, unsigned int tam) const {
 
     Cadena nueva{tam};
     for (unsigned int i = indx; i < indx + tam; ++i) {
-        char c = s_[i + indx];
         nueva[i - indx] = s_[i];
     }
 
@@ -212,8 +210,9 @@ std::istream& operator >> (std::istream& s, Cadena& c){
     tempString[i]='\0';                 // Añadimos el caracter final
 
     // Creamos una cadena con los caracteres justos y copiamos el contenido de la temporal
-    char* cadenaFinal = new char[strlen(tempString)];
+    char* cadenaFinal = new char[strlen(tempString) + 1];
     strcpy(cadenaFinal, tempString);
+    cadenaFinal[i] = '\0';
     c = Cadena{cadenaFinal};
 
     // Eliminamos las cadenas temporales
