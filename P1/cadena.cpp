@@ -38,10 +38,7 @@ Cadena Cadena::Utilidades::numero2Cadena(int n){
 // --------------------------
 
 // --- Constructores ---
-Cadena::Cadena(size_t tamanio, char relleno): tam_(tamanio) {
-
-    // Reservamos memoria para la cadena
-    s_ = new char[tam_+1] ;
+Cadena::Cadena(size_t tamanio, char relleno): tam_(tamanio), s_(new char[tamanio+1]) {
 
     // LLenamos la cadena con el caracter de relleno
     for(size_t i = 0 ; i < tamanio ; ++i){
@@ -51,8 +48,7 @@ Cadena::Cadena(size_t tamanio, char relleno): tam_(tamanio) {
     // Añadimos el caracter final
     s_[tam_] = '\0' ;
 }
-Cadena::Cadena(const Cadena &c): tam_(c.tam_){
-    s_ = new char[c.tam_ + 1];
+Cadena::Cadena(const Cadena &c): tam_(c.tam_), s_(new char [c.tam_ + 1]){
     strcpy(s_, c.s_);
 }
 Cadena::Cadena(const char* a): tam_(strlen(a)) {
@@ -204,20 +200,17 @@ std::istream& operator >> (std::istream& s, Cadena& c){
     // Vamos cogiendo los caracteres para formar la palabra
     char* tempString = new char[32];
     int i = 0;
+
     while(s.good() && !isspace(s.peek()) && i < 32 && s.peek() != EOF){
         tempString[i++] = (char) s.get();
     }
     tempString[i]='\0';                 // Añadimos el caracter final
 
     // Creamos una cadena con los caracteres justos y copiamos el contenido de la temporal
-    char* cadenaFinal = new char[strlen(tempString) + 1];
-    strcpy(cadenaFinal, tempString);
-    cadenaFinal[i] = '\0';
-    c = Cadena{cadenaFinal};
+    c = Cadena{tempString};
 
     // Eliminamos las cadenas temporales
     delete[] tempString;
-    delete[] cadenaFinal;
 
     return s;
 }
@@ -225,4 +218,5 @@ std::istream& operator >> (std::istream& s, Cadena& c){
 
 Cadena::~Cadena() {
     delete[] s_;
+    tam_ = 0;
 }

@@ -6,7 +6,7 @@ LDFLAGS = -I$(TESTS_DIR)
 VPATH = ../Tests-auto:.
 
 TESTS_DIR = ../Tests-auto/
-EJECUTABLES = test-P1-auto testfechacadena-consola #check
+EJECUTABLES = test-P1-auto testfechacadena-consola
 
 all: $(EJECUTABLES)
 
@@ -26,6 +26,9 @@ test-P1-auto: test-caso0-cadena-auto.o test-caso0-fecha-auto.o test-auto.o caden
 test-caso0-fecha-auto.o test-caso0-cadena-auto.o test-auto.o: \
 	test-caso0-fecha-auto.cpp test-caso0-cadena-auto.cpp \
 	test-auto.cpp test-auto.hpp fecha.hpp cadena.hpp
+
+valgrind: clean-all test-P1-auto
+	valgrind --leak-check=full ./test-P1-auto
 
 fecha_cadena_check: fecha_cadena_check.cpp
 	make -f Make_check.mk
@@ -53,5 +56,5 @@ clean-main: clean
 clean:
 	rm -rf *.o core *~
 
-clean-all:
-	rm -rf *.o core *~ $(EJECUTABLES) main fecha_cadena_check
+clean-all: clean
+	rm -f $(EJECUTABLES) main fecha_cadena_check

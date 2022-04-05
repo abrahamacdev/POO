@@ -197,7 +197,9 @@ Cadena Fecha::dia2Cadena() const{
     else {
         char* numberstring = (char *) malloc((sizeof (int )) * INT16_MAX);
         sprintf(numberstring, "%d", dia_);
-        return Cadena{numberstring};
+        Cadena temp = Cadena{numberstring};
+        free(numberstring);
+        return temp;
     }
 }
 Cadena Fecha::anio2Cadena() const{
@@ -277,12 +279,12 @@ bool operator<(const Fecha& f1, const Fecha& f2) {
     }
 }
 bool operator>(const Fecha& f1, const Fecha& f2) {
-    if(f1.anno() > f2.anno()) return true;
+    /*if(f1.anno() > f2.anno()) return true;
     else if (f1.anno() == f2.anno()){
         if (f1.mes() > f2.mes()) return true;
         else if (f1.mes() == f2.mes() && f1.dia() > f2.dia()) return true;
-    }
-    return false;
+    }*/
+    return !(f1 < f2) && !(f1 == f2);
 }
 bool operator<=(const Fecha& f1, const Fecha &f2)  {
     return !(f1 > f2);
@@ -310,9 +312,12 @@ std::istream& operator >>(std::istream& s, Fecha& f){
 
         // Marcamos el flujo de entrada con el estado de fallo (fail) y propagamos el error
         s.setstate(std::ios_base::failbit);
+        delete[] sTemporal;
+        sTemporal = nullptr;
         throw f;
     }
 
+    delete[] sTemporal;
 
 
     return s;
@@ -322,22 +327,10 @@ std::istream& operator >>(std::istream& s, Fecha& f){
 
 // --- Observadores ---
 const char* Fecha::cadena() const noexcept {
-    Cadena temp;
 
-    Cadena espacio{" "};
-    Cadena de{" de "};
+    static char f[40];
+    sprintf(f, "%s %d de %s de %d", Fecha::Utilidades::diaSemana2Texto(*this), dia_, Fecha::Utilidades::mes2Texto(mes_), anio_);
 
-    temp = Cadena{Fecha::Utilidades::diaSemana2Texto(*this)};
-    temp += espacio;
-    temp += dia2Cadena();
-    temp += de;
-    temp += Cadena{Fecha::Utilidades::mes2Texto(mes_)};
-    temp+= de;
-    temp += anio2Cadena();
-
-    char* c = new char[temp.length()+1];
-    strcpy(c, temp.c_str());
-
-    return c;
+    return f;
 }
 // ------------------
