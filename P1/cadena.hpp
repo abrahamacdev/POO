@@ -88,4 +88,12 @@ bool operator ==(const Cadena& f1 , const Cadena& f2) ;
 std::istream& operator >> (std::istream& s, Cadena& c);
 std::ostream& operator << (std::ostream& s, const Cadena& c);
 
+// Necesario para la P2
+namespace std {
+  template <> struct hash<Cadena> {
+    size_t operator()(const Cadena& cad) const
+    {return hash<std::string>{}(cad.c_str());}
+  };
+}
+
 #endif //FECHA_CADENA_HPP

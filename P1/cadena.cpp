@@ -1,6 +1,3 @@
-//
-// Created by poo on 26/3/22.
-//
 
 #include "cadena.hpp"
 
@@ -38,7 +35,7 @@ Cadena Cadena::Utilidades::numero2Cadena(int n){
 // --------------------------
 
 // --- Constructores ---
-Cadena::Cadena(size_t tamanio, char relleno): tam_(tamanio), s_(new char[tamanio+1]) {
+Cadena::Cadena(size_t tamanio, char relleno): s_(new char[tamanio+1]), tam_(tamanio) {
 
     // LLenamos la cadena con el caracter de relleno
     for(size_t i = 0 ; i < tamanio ; ++i){
@@ -48,12 +45,21 @@ Cadena::Cadena(size_t tamanio, char relleno): tam_(tamanio), s_(new char[tamanio
     // Añadimos el caracter final
     s_[tam_] = '\0' ;
 }
-Cadena::Cadena(const Cadena &c): tam_(c.tam_), s_(new char [c.tam_ + 1]){
-    strcpy(s_, c.s_);
+Cadena::Cadena(const Cadena &c): s_(new char [c.tam_ + 1]), tam_(c.tam_) {
+
+    for (int i = 0; i < tam_; ++i) {
+           s_[i] = c.s_[i];
+    }
+
+    s_[tam_] = '\0';
 }
-Cadena::Cadena(const char* a): tam_(strlen(a)) {
-    s_ = new char[tam_ + 1];
-    strcpy(s_, a);
+Cadena::Cadena(const char* a): s_(new char[strlen(a) + 1]), tam_(strlen(a)) {
+
+    for (int i = 0; i < tam_; ++i) {
+        s_[i] = a[i];
+    }
+
+    s_[tam_] = '\0';
 }
 Cadena::Cadena(Cadena&& c2): s_(c2.s_), tam_(c2.tam_) {
     c2.s_ = nullptr;
@@ -198,7 +204,7 @@ std::istream& operator >> (std::istream& s, Cadena& c){
     for (int i = 0; i < 32 && isspace(s.peek()); ++i && s.get());
 
     // Vamos cogiendo los caracteres para formar la palabra
-    char* tempString = new char[32];
+    char* tempString = new char[33];
     int i = 0;
 
     while(s.good() && !isspace(s.peek()) && i < 32 && s.peek() != EOF){
