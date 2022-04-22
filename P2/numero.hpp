@@ -2,8 +2,8 @@
 // Created by poo on 21/4/22.
 //
 
-#ifndef ALVAREZ_CRUZ_ABRAHAM_NUMERO_H
-#define ALVAREZ_CRUZ_ABRAHAM_NUMERO_H
+#ifndef ALVAREZ_CRUZ_ABRAHAM_NUMERO_HPP
+#define ALVAREZ_CRUZ_ABRAHAM_NUMERO_HPP
 
 #include "../P1/cadena.hpp"
 
@@ -36,4 +36,4 @@ class Numero {
         Cadena numero_;
 };
 
-#endif //ALVAREZ_CRUZ_ABRAHAM_NUMERO_H
+#endif //ALVAREZ_CRUZ_ABRAHAM_NUMERO_HPP

@@ -2,8 +2,8 @@
 // Created by poo on 21/4/22.
 //
 
-#ifndef ALVAREZ_CRUZ_ABRAHAM_CLAVE_H
-#define ALVAREZ_CRUZ_ABRAHAM_CLAVE_H
+#ifndef ALVAREZ_CRUZ_ABRAHAM_CLAVE_HPP
+#define ALVAREZ_CRUZ_ABRAHAM_CLAVE_HPP
 
 #include "../P1/cadena.hpp"
 
@@ -32,6 +32,7 @@ class Clave {
 
     private:
         Cadena contrasenia_;
+        static const int tamanioSalt_ = 2;
 };
 
-#endif //ALVAREZ_CRUZ_ABRAHAM_CLAVE_H
+#endif //ALVAREZ_CRUZ_ABRAHAM_CLAVE_HPP

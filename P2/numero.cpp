@@ -1,4 +1,4 @@
-#include "numero.h"
+#include "numero.hpp"
 #include "../luhn.cpp"
 
 Numero::Numero(const Cadena &numero){
