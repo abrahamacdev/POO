@@ -7,6 +7,8 @@
 
 #include "../P1/cadena.hpp"
 
+bool luhn(const Cadena& numero);
+
 class Numero {
 
     public:

@@ -9,8 +9,9 @@
 #include "ctime"
 #include "stdio.h"
 #include "cstring"
-#include "cadena.hpp"
 #include "iostream"
+
+#include "cadena.hpp"
 
 class Fecha {
 

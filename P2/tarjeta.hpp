@@ -9,6 +9,8 @@
 #include "usuario.hpp"
 #include "../P1/fecha.hpp"
 
+class Numero;
+class Usuario;
 class Tarjeta{
 
     public:
@@ -37,7 +39,7 @@ class Tarjeta{
 
         Tarjeta(const Numero& numeroTarjeta, const Usuario& titular, const Fecha& caducidad);
 
-        // "Dos tarjetas no se pueden copiar, ni al crearse ni por asignación"
+        // "Dos tarjetas_ no se pueden copiar, ni al crearse ni por asignación"
         Tarjeta(const Tarjeta&) = delete;
         Tarjeta& operator = (const Tarjeta&) = delete;
 
@@ -46,10 +48,9 @@ class Tarjeta{
         inline const Fecha& caducidad() const { return caducidad_; }
         inline bool activa() const { return activa_; }
         Tipo tipo() const;
-        Tipo tipo() const;
 
-        inline bool activa(bool activar = true) { activa_ = activar; return activa_; }
-        inline void anular_tarjeta() { titular_ = nullptr_t; activa_ = false; }
+        bool activa(bool activar = true);
+        void anular_tarjeta();
 
         ~Tarjeta();
 
@@ -60,7 +61,7 @@ class Tarjeta{
 
     private:
         const Numero numeroTarjeta_;
-        const Usuario* titular_;
+        const mutable Usuario* titular_;
         const Fecha caducidad_;
         bool activa_;
 

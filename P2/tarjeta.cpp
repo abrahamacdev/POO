@@ -10,9 +10,18 @@ Tarjeta::Tarjeta(const Numero &numeroTarjeta, const Usuario &titular, const Fech
     // Comprobamos que la fecha sea >= que hoy
     if (caducidad < Fecha()) throw Caducada(caducidad);
 
-    // EL usuario nos guardara en su listado de tarjetas
-    titular.es_titular(this);
+    // EL usuario nos guardara en su listado de tarjetas_
+    (const_cast<Usuario&>(titular)).es_titular_de(*this);
 
+}
+bool Tarjeta::activa(bool activar) {
+    activa_ = activar;
+    return activa_;
+}
+
+void Tarjeta::anular_tarjeta() {
+    titular_ = nullptr;
+    activa_ = false;
 }
 
 Tarjeta::Tipo Tarjeta::tipo() const {
@@ -56,7 +65,7 @@ Tarjeta::~Tarjeta() {
 
     // Comprobamos que el Usuario no halla sido eliminado
     if (titular_){
-        titular_->no_es_titular_de(this);
+        const_cast<Usuario&>(*titular_).no_es_titular_de(*this);
     }
 
 }

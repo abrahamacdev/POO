@@ -1,8 +1,4 @@
 //
-// Created by Judith Olalde Alonso on 6/3/22.
-//
-
-//
 // Created by abrah on 26/02/2022.
 //
 

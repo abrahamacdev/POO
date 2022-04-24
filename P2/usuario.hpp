@@ -8,17 +8,20 @@
 #include "map"
 #include "unordered_map"
 #include "unordered_set"
-#include "articulo.h"
-#include "../P1/cadena.hpp"
-#include "tarjeta.hpp"
-#include "numero.hpp"
-#include "clave.hpp"
 #include "iostream"
 
+#include "../P1/cadena.hpp"
+#include "articulo.hpp"
+#include "tarjeta.hpp"
+#include "clave.hpp"
+
+class Numero;
+class Tarjeta;
 class Usuario {
 public:
     typedef std::unordered_map<Articulo*, unsigned int> Articulos;
     typedef std::map<Numero, Tarjeta*> Tarjetas;
+    typedef std::unordered_set<Cadena> Usuarios;
 
     class Id_duplicado {
         const Cadena identificador;
@@ -36,7 +39,7 @@ public:
     Usuario& operator=(const Usuario& u) = delete;
 
     // Asociacion con clase Tarjeta
-    void es_titular(Tarjeta& tarjeta);
+    void es_titular_de(Tarjeta& tarjeta);
     void no_es_titular_de(Tarjeta& tarjeta);
 
     // Asociacion con la clase Articulo
@@ -47,12 +50,12 @@ public:
     inline const Cadena& nombre() const { return nombre_; };
     inline const Cadena& apellidos() const { return apellidos_; };
     inline const Cadena& direccion() const { return direccion_; };
-    //tarjetas() const;                 // TODO Falta añadir el método observador "tarjetas"
+    inline const Tarjetas& tarjetas() const { return tarjetas_; };                 // TODO Falta añadir el método observador "tarjetas_"
     inline const Articulos& compra() const { return carrito; };
     inline size_t n_articulos() const { return carrito.size(); };
 
     // Operadores
-    friend std::ostream& operator << (std::ostream& os, const Usuario& usuario);  // Todo Falta implementar el método
+    friend std::ostream& operator << (std::ostream& os, const Usuario& usuario);
 
     ~Usuario();
 
@@ -61,10 +64,9 @@ private:
     const Cadena identificador_, nombre_, apellidos_, direccion_;
     const Clave clave_;
     Articulos carrito;
-    Tarjetas tarjetas;
+    Tarjetas tarjetas_;
 
     // LLevamos el registro de usuarios
-    typedef std::unordered_set<Cadena> Usuarios;
     static Usuarios listadoUsuarios;
 };
 
