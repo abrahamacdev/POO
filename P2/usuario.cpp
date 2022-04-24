@@ -2,9 +2,53 @@
 // Created by poo on 21/4/22.
 //
 
-#include "usuario.hpp"
 #include "iomanip"
+#include "unistd.h"
+#include "random"
 
+#include "usuario.hpp"
+
+// ********** Clase "Clave" **********
+Clave::Clave(const char *contrasenia) {
+
+    // Conjunto de caracteres que se usarán para el salt
+    static const char* caracteres = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./"};
+
+    // Comprobamos que la contraseña tenga al menos 5 caracteres
+    if (strlen(contrasenia) < 5) throw Clave::Incorrecta(Razon::CORTA);
+
+    // Generador de números aleatorios
+    std::random_device dev;
+    std::mt19937 rng(dev());    // Motor usado para la generación del número aleatorio (Mersenne Twister)
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0,strlen(caracteres)); // Distribución en el rango [0, #len(caracteres)]
+
+    // Generamos el salt de manera aleatoria
+    char* salt = new char[tamanioSalt_];
+    for (int i = 0; i < tamanioSalt_; ++i) {
+        salt[i] = caracteres[dist(rng)];
+    }
+
+    // Ciframos la contraseña con el salt recién generado
+    const char* cifrada = crypt(contrasenia, salt);
+
+    // No se ha podido cifrar la clave
+    if (cifrada == nullptr) std::throw_with_nested(Clave::Incorrecta(Razon::ERROR_CRYPT));
+    else {
+        // Guardamos la contraseña cifrada
+        contrasenia_ = Cadena(cifrada);
+    }
+}
+
+bool Clave::verifica(const char *c) const {
+    return strcmp(crypt(c, contrasenia_.c_str()), contrasenia_.c_str()) == 0;
+}
+// ************************************
+
+
+
+
+
+// ********** Clase "Usuario" **********
 // Inicializamos la variable estática
 Usuario::Usuarios Usuario::listadoUsuarios;
 
@@ -41,11 +85,7 @@ void Usuario::compra(Articulo &articulo, unsigned int cantidad) {
         carrito.erase(&articulo);
     }
     else {
-
-        // Si el artículo ya está en el carrito, actualizamos su cantidad
-        if (carrito[&articulo]) carrito[&articulo] = cantidad;
-        // Si no, lo insertamos
-        else carrito.insert(std::make_pair(&articulo, cantidad));
+        carrito[&articulo] = cantidad;
     }
 }
 
@@ -68,23 +108,11 @@ void mostrar_carro(std::ostream& os, const Usuario& usuario){
        << "Cant. Artículo" << std::endl
        << std::setw(50) << std::setfill('=') << "" << std::endl;
 
-    for (int i = 0; i < usuario.n_articulos(); ++i) {
+    auto i = usuario.compra().begin();
+    while (i != usuario.compra().end()){
 
-        auto j = usuario.compra().begin();
-
-        while (j != usuario.compra().end()){
-
-            //os << std::setw(4) << std::setfill(' ') << "" << *j->first << std::endl;
-            os << *j->first << std::endl;
-
-            /*os << std::setw(4) << i->second << "    "
-               << " [" << (*i->first).referencia() << "] " << "\""
-               << (*i->first).titulo() << "\", "
-               << (*i->first).f_publi().anno()
-               << ". " << std::fixed << std::setprecision(2) << (*i->first).precio() << " €" << std::endl;*/
-
-            j++;
-        }
+        os << std::setw(3) << std::setfill(' ') << i->second << std::setw(4) << std::setfill(' ') <<  *i->first << std::endl;
+        i++;
     }
 }
 
@@ -101,3 +129,4 @@ Usuario::~Usuario() {
     // Nos eliminamos del listado de usuarios
     listadoUsuarios.erase(identificador_);
 }
+// ************************************

@@ -334,7 +334,7 @@ FCTMF_FIXTURE_SUITE_BGN(test_p2) {
     fct_chk(!tarjeta.titular());
   }
   FCT_TEST_END();
-  
+
   FCT_TEST_BGN(Usuario---Tarjeta - insercion en flujo) {
     const Tarjeta tarjeta(nTarjeta, *pU, fUnaSemana);
     const string s = toString(*pU);
@@ -397,7 +397,6 @@ FCTMF_FIXTURE_SUITE_BGN(test_p2) {
     string sCarro = os.str();
     chk_incl_str(sCarro, sId);
     chk_incl_cstr(sCarro, "Artículos: 2");
-
     os.str("");
     os << "[111] \"The Standard Template Library\", "
        << articulo1.f_publi().anno()

@@ -5,17 +5,47 @@
 #ifndef ALVAREZ_CRUZ_ABRAHAM_TARJETA_HPP
 #define ALVAREZ_CRUZ_ABRAHAM_TARJETA_HPP
 
-#include "numero.hpp"
-#include "usuario.hpp"
 #include "../P1/fecha.hpp"
+#include "../P1/cadena.hpp"
 
-class Numero;
+#include "usuario.hpp"
+
 class Usuario;
+
+class Numero {
+
+public:
+    enum Razon {
+        LONGITUD, DIGITOS, NO_VALIDO
+    };
+
+    class Incorrecto {
+
+        Razon razon_;
+
+    public:
+        explicit Incorrecto(Razon razon): razon_(razon){};
+
+        const Razon& razon() const { return razon_; };
+    };
+
+    // Contructores
+    explicit Numero(const Cadena& numero);
+
+    // Operadores
+    operator const char*() const;
+
+    friend bool operator <(const Numero& numero1, const Numero& numero2);
+
+private:
+    Cadena numero_;
+};
+
 class Tarjeta{
 
     public:
         enum Tipo {
-            Otro, Visa, Mastercard, Maestro, JCB, AmericanExpress
+            Otro, VISA, Mastercard, Maestro, JCB, AmericanExpress
         };
 
         class Caducada {
@@ -66,5 +96,7 @@ class Tarjeta{
         bool activa_;
 
 };
+
+std::ostream& operator << (std::ostream& os, const Tarjeta::Tipo& tipo);
 
 #endif //ALVAREZ_CRUZ_ABRAHAM_TARJETA_HPP
