@@ -45,7 +45,7 @@ Cadena::Cadena(size_t tamanio, char relleno): s_(new char[tamanio+1]), tam_(tama
     // Añadimos el caracter final
     s_[tam_] = '\0' ;
 }
-Cadena::Cadena(const Cadena &c): s_(new char [c.tam_ + 1]), tam_(c.tam_) {
+Cadena::Cadena(const Cadena &c): s_(new char [c.tam_]), tam_(c.tam_) {
 
     for (int i = 0; i < tam_; ++i) {
            s_[i] = c.s_[i];

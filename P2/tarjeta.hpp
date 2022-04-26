@@ -80,7 +80,7 @@ class Tarjeta{
         Tipo tipo() const;
 
         bool activa(bool activar = true);
-        void anular_tarjeta();
+        void anula_titular();
 
         ~Tarjeta();
 

@@ -29,7 +29,7 @@ Numero::Numero(const Cadena &numero){
     }
 
     // Ajustamos la cadena al tamaño que debe tener
-    if (j != numero.length() - 1){
+    if (j != numero.length()){
         copia = Cadena(copia.substr(0, j));
     }
 
@@ -68,7 +68,7 @@ bool Tarjeta::activa(bool activar) {
     return activa_;
 }
 
-void Tarjeta::anular_tarjeta() {
+void Tarjeta::anula_titular() {
     titular_ = nullptr;
     activa_ = false;
 }

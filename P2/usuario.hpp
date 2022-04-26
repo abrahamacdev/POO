@@ -34,7 +34,7 @@ public:
         inline const Razon& razon() const { return razon_; };
     };
 
-    explicit Clave(const char* contrasenia);
+    Clave(const char* contrasenia);
 
     bool verifica(const char* c) const;
     inline const Cadena& clave() const { return contrasenia_; };

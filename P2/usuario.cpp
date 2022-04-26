@@ -73,7 +73,7 @@ void Usuario::es_titular_de(Tarjeta& tarjeta) {
     }
 }
 void Usuario::no_es_titular_de(Tarjeta &tarjeta) {
-    tarjeta.anular_tarjeta();
+    tarjeta.anula_titular();
     tarjetas_.erase(tarjeta.numero());
 }
 
@@ -121,7 +121,7 @@ Usuario::~Usuario() {
 
     // Anulamos la tarjeta
     while (iterador != tarjetas_.end()){
-        iterador->second->anular_tarjeta();
+        iterador->second->anula_titular();
 
         iterador++;
     }

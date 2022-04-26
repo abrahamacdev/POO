@@ -26,8 +26,6 @@ class Articulo{
         inline double& precio() { return precio_; };
         inline unsigned int& stock() { return existencias_; };
 
-        friend std::ostream& operator << (std::ostream& os, const Articulo& articulo);
-
     private:
 
         const Cadena referencia_, titulo_;
@@ -35,5 +33,7 @@ class Articulo{
         double precio_;
         unsigned int existencias_;
 };
+
+std::ostream& operator << (std::ostream& os, const Articulo& articulo);
 
 #endif //ALVAREZ_CRUZ_ABRAHAM_ARTICULO_HPP
