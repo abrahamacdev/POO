@@ -7,6 +7,7 @@
 
 #include "../P1/fecha.hpp"
 #include "../P1/cadena.hpp"
+#include "set"
 
 #include "usuario.hpp"
 
@@ -44,6 +45,9 @@ private:
 class Tarjeta{
 
     public:
+        friend class Usuario;
+        typedef std::set<Numero> Tarjetas;
+
         enum Tipo {
             Otro, VISA, Mastercard, Maestro, JCB, AmericanExpress
         };
@@ -80,7 +84,6 @@ class Tarjeta{
         Tipo tipo() const;
 
         bool activa(bool activar = true);
-        void anula_titular();
 
         ~Tarjeta();
 
@@ -94,6 +97,11 @@ class Tarjeta{
         const mutable Usuario* titular_;
         const Fecha caducidad_;
         bool activa_;
+
+        static Tarjetas listadoTarjetas;
+
+        // Para que sólo lo pueda llamar Usuario
+        void anula_titular();
 
 };
 

@@ -54,10 +54,16 @@ bool operator<(const Numero &numero1, const Numero &numero2) { return strcmp(num
 
 
 // ********** Clase "Tarjeta" **********
+// Inicializamos la variable estática
+Tarjeta::Tarjetas Tarjeta::listadoTarjetas;
+
 Tarjeta::Tarjeta(const Numero &numeroTarjeta, const Usuario &titular, const Fecha &caducidad): numeroTarjeta_(numeroTarjeta), titular_(&titular),
                                                                                                caducidad_(caducidad), activa_(true) {
     // Comprobamos que la fecha sea >= que hoy
     if (caducidad < Fecha()) throw Caducada(caducidad);
+
+    // Comprobamos que no halla una tarjeta con el mismo número
+    if(!listadoTarjetas.insert(numeroTarjeta).second) throw Num_duplicado(numeroTarjeta);
 
     // EL usuario nos guardara en su listado de tarjetas_
     (const_cast<Usuario&>(titular)).es_titular_de(*this);
@@ -117,6 +123,8 @@ Tarjeta::~Tarjeta() {
         const_cast<Usuario&>(*titular_).no_es_titular_de(*this);
     }
 
+    // Eliminamos el número de yarjeta del listado
+    listadoTarjetas.erase(numeroTarjeta_);
 }
 
 std::ostream& operator<<(std::ostream &os, const Tarjeta& tarjeta) {
