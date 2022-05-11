@@ -19,7 +19,7 @@ Numero::Numero(const Cadena &numero){
     copia = Cadena(copia.c_str());
 
     // Comprobamos que no haya ningún caracter que no sea un dígito
-    if (std::find_if(copia.begin(), copia.end(), std::not1(EsDigito())) != copia.end()){
+    if (std::find_if(copia.begin(), copia.end()+1, std::not1(EsDigito())) != copia.end()){
         throw Numero::Incorrecto(Razon::DIGITOS);
     }
 
