@@ -3,8 +3,8 @@
 // Referencias: 
 //              http://en.wikipedia.org/wiki/Luhn_algorithm
 //
-//#include "P1/cadena.hpp"
-#include "cadena.hpp"
+#include "P1/cadena.hpp"
+//#include "cadena.hpp"
 #include <cstddef>
 
 bool luhn(const Cadena& numero)
