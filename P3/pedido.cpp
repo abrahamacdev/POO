@@ -5,7 +5,7 @@
 #include "pedido.hpp"
 #include "iomanip"
 
-Pedido::Pedido(const Usuario_Pedido &usuarioPedido, const Pedido_Articulo &pedidoArticulo, const Usuario *cliente,
+Pedido::Pedido(const Usuario_Pedido &usuarioPedido, const pedido_articulo &pedidoArticulo, const Usuario *cliente,
                const Tarjeta *tarjeta, const Fecha &fecha): num_(++N_pedidos), tarjeta_(tarjeta), fecha_(fecha), total_(0.0){
 
     // TODO Llamar a la correspondiente funcioón de pedidoArticulo (pág 4)

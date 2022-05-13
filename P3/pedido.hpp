@@ -10,7 +10,7 @@
 #include "usuario.hpp"
 
 class Usuario_Pedido;
-class Pedido_Articulo;
+class pedido_articulo;
 
 class Pedido {
 
@@ -50,7 +50,7 @@ class Pedido {
         };
 
 
-        Pedido(const Usuario_Pedido& usuarioPedido, const Pedido_Articulo& pedidoArticulo, const Usuario* cliente,
+        Pedido(const Usuario_Pedido& usuarioPedido, const pedido_articulo& pedidoArticulo, const Usuario* cliente,
                const Tarjeta* tarjeta, const Fecha& fecha = Fecha());
 
 

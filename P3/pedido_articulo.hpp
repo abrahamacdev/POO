@@ -40,18 +40,28 @@ class OrdenaArticulos: std::binary_function<Articulo*, Articulo*, bool> {
 };
 
 
-class Pedido_Articulo {
+class pedido_articulo {
 
     public:
-        typedef std::map<Pedido*, LineaPedido*, OrdenaPedidos> Pedidos;
-        typedef std::map<Articulo*, LineaPedido*, OrdenaArticulos> Articulos;
+        typedef std::map<Articulo*, LineaPedido, OrdenaArticulos> ItemsPedido;
+        typedef std::map<Pedido*, LineaPedido, OrdenaPedidos> Pedidos;
+
+        void pedir(Pedido& pedido, Articulo& articulo, double precio, unsigned int cantidad = 1);
+        void pedir(Articulo& articulo, Pedido& pedido, double precio, unsigned int cantidad = 1);
+
+        inline const ItemsPedido& detalle(Pedido& pedido) { return pedido_articulo[&pedido]; };
+        inline const Pedidos& ventas(Articulo& articulo) { return articulo_pedido[&articulo]; };
+
+        std::ostream& mostrarDetallePedidos(std::ostream& os);
+        std::ostream& mostrarVentasArticulos(std::ostream& os);
 
     private:
-
-        std::map<Pedido*, Articulos, OrdenaPedidos> pedidos_;
-        std::map<Articulo*, Pedidos, OrdenaArticulos> articulos_;
-
+        std::map<Pedido*, ItemsPedido, OrdenaPedidos> pedido_articulo;
+        std::map<Articulo*, Pedidos, OrdenaArticulos> articulo_pedido;
 };
+
+std::ostream& operator << (std::ostream& os, const pedido_articulo::ItemsPedido& itemsPedido);
+std::ostream& operator << (std::ostream& os, const pedido_articulo::Pedidos& pedidos);
 
 
 #endif //ALVAREZ_CRUZ_ABRAHAM_PEDIDO_ARTICULO_HPP
