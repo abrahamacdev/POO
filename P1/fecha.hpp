@@ -15,8 +15,6 @@
 
 class Fecha {
 
-    int dia_, mes_, anio_;
-
 public:
 
     static const int AnnoMinimo = 1902;
@@ -36,9 +34,7 @@ public:
     const char* cadena() const noexcept;
 
     // Operadores
-    Fecha operator +(int d);
     Fecha operator +(int d) const;
-    Fecha operator -(int d);
     Fecha operator -(int d) const;
     Fecha& operator +=(int d);
     Fecha& operator -=(int d);
@@ -80,6 +76,8 @@ public:
 
 private:
 
+    int dia_, mes_, anio_;
+
     // Auxiliar
     static bool diaValido(int d, int m, int y = Utilidades::anioActual());
     static bool mesValido(int m);
@@ -95,6 +93,7 @@ bool operator >(const Fecha& f1, const Fecha& f2);
 bool operator >=(const Fecha& f1, const Fecha& f2);
 bool operator <(const Fecha& f1, const Fecha& f2);
 bool operator <=(const Fecha& f1, const Fecha& f2);
+
 std::ostream& operator << (std::ostream& s, const Fecha& f);      // Operación de extracción
 std::istream& operator >> (std::istream& s, Fecha& f);            // Operación de insercción
 

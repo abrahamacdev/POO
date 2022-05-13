@@ -209,17 +209,15 @@ Cadena Fecha::anio2Cadena() const{
 
 
 // --- Operadores ---
-Fecha Fecha::operator+(int d) {
-    return Fecha(*this) += d;
-}
 Fecha Fecha::operator+(int d) const {
-    return Fecha(*this) += d;
-}
-Fecha Fecha::operator-(int d) {
-    return Fecha(*this) -= d;
+    Fecha temp(*this);
+    temp += d;
+    return temp;
 }
 Fecha Fecha::operator-(int d) const {
-    return Fecha(*this) -= d;
+    Fecha temp(*this);
+    temp += -d;
+    return temp;
 }
 Fecha& Fecha::operator+=(int d) {
 
@@ -239,8 +237,7 @@ Fecha& Fecha::operator+=(int d) {
     return *this;
 }
 Fecha& Fecha::operator-=(int d) {
-    *this += -d;
-    return *this;
+    return *this += -d;;
 }
 Fecha Fecha::operator++(int d) {
     Fecha tmp(*this);
@@ -256,41 +253,29 @@ Fecha& Fecha::operator++() {
     return *this += 1;
 }
 Fecha& Fecha::operator--() {
-    return  *this -= 1;
+    return  *this += -1;
 }
+
+
 bool operator==(const Fecha& f1, const Fecha& f2) {
-    return f1.anno() == f2.anno() && f1.mes() == f2.mes() && f1.dia() == f2.dia();
+    return (f1.anno() == f2.anno()) && (f1.mes() == f2.mes()) && (f1.dia() == f2.dia());
 }
 bool operator<(const Fecha& f1, const Fecha& f2) {
-
-    // Comparamos los años
-    if (f1.anno() > f2.anno()) return false;       // Nuestro año es mayor que el otro
-    else if (f1.anno() < f2.anno()) return true;   // Su año es mayor que el nuestro
-    else {                                  // Tenemos el mismo año
-
-        // Comparamos los años
-        if (f1.mes() > f2.mes()) return false;     // Nuestro mes_ es mayor que el otro
-        else if (f1.mes() < f2.mes()) return true; // Su mes_ es mayor que el nuestro
-        else {                              // Tenemos el mismo mes_
-
-            // Comparamos los días
-            return f1.dia() < f2.dia();
-        }
-    }
+    return f2 > f1;
 }
 bool operator>(const Fecha& f1, const Fecha& f2) {
-    /*if(f1.anno() > f2.anno()) return true;
+    if(f1.anno() > f2.anno()) return true;
     else if (f1.anno() == f2.anno()){
-        if (f1.mes() > f2.mes()) return true;
-        else if (f1.mes() == f2.mes() && f1.dia() > f2.dia()) return true;
-    }*/
-    return !(f1 < f2) && !(f1 == f2);
+        if (f1.mes() == f2.mes()) return f1.dia() > f2.dia();
+        else return f1.mes() > f2.mes();
+    }
+    else return false;
 }
 bool operator<=(const Fecha& f1, const Fecha &f2)  {
-    return !(f1 > f2);
+    return f1 < f2 || f1 == f2;
 }
 bool operator>=(const Fecha& f1, const Fecha &f2) {
-    return !(f1 < f2);
+    return f1 > f2 || f1 == f2;
 }
 bool operator!=(const Fecha& f1, const Fecha &f2) {
     return !(f1 == f2);

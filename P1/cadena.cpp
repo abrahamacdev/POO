@@ -35,31 +35,29 @@ Cadena Cadena::Utilidades::numero2Cadena(int n){
 // --------------------------
 
 // --- Constructores ---
-Cadena::Cadena(size_t tamanio, char relleno): s_(new char[tamanio+1]), tam_(tamanio) {
+Cadena::Cadena(size_t tamanio, char relleno): tam_(tamanio) {
+
+
+    s_ = new char[tamanio+1];
 
     // LLenamos la cadena con el caracter de relleno
-    for(size_t i = 0 ; i < tamanio ; ++i){
-        s_[i] = relleno ;
+    for(size_t i = 0 ; i < tamanio; ++i)
+    {
+        s_[i] = relleno;
     }
 
     // Añadimos el caracter final
     s_[tam_] = '\0' ;
 }
-Cadena::Cadena(const Cadena &c): s_(new char [c.tam_]), tam_(c.tam_) {
-
-    for (int i = 0; i < tam_; ++i) {
-           s_[i] = c.s_[i];
-    }
-
-    s_[tam_] = '\0';
+Cadena::Cadena(const Cadena &c): tam_(c.tam_) {
+    s_ = new char [c.tam_ + 1];
+    strcpy(s_, c.s_);
 }
-Cadena::Cadena(const char* a): s_(new char[strlen(a) + 1]), tam_(strlen(a)) {
+Cadena::Cadena(const char* a) {
 
-    for (int i = 0; i < tam_; ++i) {
-        s_[i] = a[i];
-    }
-
-    s_[tam_] = '\0';
+    tam_ = strlen(a);
+    s_ = new char[tam_ + 1];
+    strcpy(s_, a);
 }
 Cadena::Cadena(Cadena&& c2): s_(c2.s_), tam_(c2.tam_) {
     c2.s_ = nullptr;
@@ -123,8 +121,8 @@ Cadena& Cadena::operator=(const Cadena &c2) {
         delete[] this->s_ ;
 
         // Reservamos memoria para la nueva cadena y su tamaño
-        this->tam_ = strlen(c2.s_) ;
-        this->s_ = new char[tam_ +1] ;
+        this->tam_ = c2.tam_ ;
+        this->s_ = new char[tam_ + 1];
 
         // Copiamos el contenido de la cadena
         strcpy(this->s_,c2.s_) ;
@@ -135,21 +133,23 @@ Cadena& Cadena::operator=(const Cadena &c2) {
 Cadena& Cadena::operator=(const char* c2){
 
     // ELiminamos la cadena actual
-    delete[] this->s_ ;
+    delete[] s_ ;
 
     // Reservamos memoria para la nueva cadena y su tamaño
-    this->tam_ = strlen(c2) ;
-    this->s_ = new char[tam_ +1] ;
+    tam_ = strlen(c2);
+    s_ = new char[tam_ +1];
 
     // Copiamos el contenido de la cadena
-    strcpy(this->s_,c2) ;
+    strcpy(s_,c2) ;
     return *this;
 }
 Cadena& Cadena::operator=(Cadena&& c2)  noexcept {
 
+    delete[] s_;
+
     // Nos asignamos los valores de los atributos de c2
-    this->tam_ = c2.tam_;
-    this->s_ = c2.s_;
+    tam_ = c2.tam_;
+    s_ = c2.s_;
 
     c2.tam_ = 0;
     c2.s_ = nullptr;        // Importante para evitar errores con nuestra cadena
@@ -158,13 +158,14 @@ Cadena& Cadena::operator=(Cadena&& c2)  noexcept {
 }
 Cadena& Cadena::operator +=(const Cadena& c2){
 
-    char* temp = new char[tam_ + c2.tam_ + 1]();
-    strcpy(temp, s_);
-    strcat(temp, c2.s_);
-    tam_ += c2.tam_;
+    Cadena temp(*this);
 
+    tam_ += c2.tam_;
     delete[] s_;
-    s_ = temp;
+
+    s_ = new char [tam_ + 1];
+    strcpy(s_, temp.s_);
+    strcat(s_, c2.s_);
 
     return *this;
 }
@@ -204,7 +205,7 @@ std::istream& operator >> (std::istream& s, Cadena& c){
     for (int i = 0; i < 32 && isspace(s.peek()); ++i && s.get());
 
     // Vamos cogiendo los caracteres para formar la palabra
-    char* tempString = new char[33];
+    char* tempString = new char[32];
     int i = 0;
 
     while(s.good() && !isspace(s.peek()) && i < 32 && s.peek() != EOF){
