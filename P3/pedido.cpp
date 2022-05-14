@@ -10,7 +10,7 @@
 int Pedido::N_pedidos = 0;
 
 Pedido::Pedido(Usuario_Pedido &usuarioPedido, Pedido_Articulo &pedidoArticulo, Usuario& cliente,
-               const Tarjeta& tarjeta, const Fecha &fecha): num_(++N_pedidos), tarjeta_(&tarjeta), fecha_(fecha), total_(0.0){
+               const Tarjeta& tarjeta, const Fecha &fecha): num_(N_pedidos + 1), tarjeta_(&tarjeta), fecha_(fecha), total_(0.0){
 
     // El carrito está vacío
     if (cliente.n_articulos() == 0) throw Pedido::Vacio(cliente);
@@ -54,14 +54,15 @@ Pedido::Pedido(Usuario_Pedido &usuarioPedido, Pedido_Articulo &pedidoArticulo, U
 
 
     // Asociamos al usuario con el pedido
+    N_pedidos++;
     usuarioPedido.asocia(cliente, *this);
 };
 
 // TODO Comprobar como funciona el print()
 std::ostream& operator << (std::ostream& os, const Pedido& pedido){
     os << "Núm. pedido: " << pedido.numero() << std::endl
-    << "Fecha:" << std::setfill(' ') <<  std::setw(50) << pedido.fecha() << std::endl
-    << "Pagado con: " << std::setfill(' ') <<  std::setw(50) << pedido.tarjeta()->tipo() << " nº: " << pedido.tarjeta()->numero() << std::endl
-    << "Importe: " << std::setfill(' ') <<  std::setw(50) << std::fixed << std::setprecision(2) << pedido.total() << "€";
+    << "Fecha: " << pedido.fecha() << std::endl
+    << "Pagado con: " << pedido.tarjeta()->tipo() << " n.º: " << pedido.tarjeta()->numero() << std::endl
+    << "Importe: " << std::fixed << std::setprecision(2) << pedido.total() << " €";
     return os;
 };
