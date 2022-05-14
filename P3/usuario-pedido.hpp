@@ -8,6 +8,7 @@
 #include "pedido.hpp"
 #include "usuario.hpp"
 #include "set"
+#include "map"
 
 class Usuario_Pedido {
 

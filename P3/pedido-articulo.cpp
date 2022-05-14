@@ -18,10 +18,8 @@ std::ostream& operator << (std::ostream& os, const LineaPedido& lineaPedido){
 // ----- Pedido_Articulo -----
 void Pedido_Articulo::pedir(Pedido& pedido, Articulo& articulo, double precio, unsigned int cantidad){
 
-    LineaPedido lineaPedido(precio, cantidad);
-
-    pedido_articulo[&pedido].insert(std::make_pair(&articulo, lineaPedido));
-    articulo_pedido[&articulo].insert(std::make_pair(&pedido, lineaPedido));
+    articulo_pedido[&articulo].insert(std::make_pair(&pedido, LineaPedido(precio, cantidad)));
+    pedido_articulo[&pedido].insert(std::make_pair(&articulo, LineaPedido(precio, cantidad)));
 }
 
 void Pedido_Articulo::pedir(Articulo& articulo, Pedido& pedido, double precio, unsigned int cantidad){

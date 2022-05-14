@@ -5,10 +5,21 @@
 #ifndef ALVAREZ_CRUZ_ABRAHAM_PEDIDO_ARTICULO_HPP
 #define ALVAREZ_CRUZ_ABRAHAM_PEDIDO_ARTICULO_HPP
 
-#include "iostream"
 #include "map"
 #include "pedido.hpp"
 #include "articulo.hpp"
+
+struct OrdenaPedidos: public std::binary_function<Pedido*, Pedido*, bool> {
+    bool operator()(const Pedido* pedido1, const Pedido* pedido2) const {
+        return pedido1->numero() < pedido2->numero();
+    }
+};
+
+struct OrdenaArticulos: public std::binary_function<Articulo*, Articulo*, bool> {
+    bool operator()(const Articulo* articulo1, const Articulo* articulo2) const {
+        return articulo1->referencia() < articulo2->referencia();
+    }
+};
 
 class LineaPedido {
 
@@ -23,23 +34,6 @@ private:
     unsigned int cantidad_;
 };
 std::ostream& operator << (std::ostream& os, const LineaPedido& lineaPedido);
-
-
-class OrdenaPedidos: std::binary_function<Pedido*, Pedido*, bool> {
-
-    public:
-        bool operator()(const Pedido* pedido1, const Pedido* pedido2) const {
-            return pedido1->numero() < pedido2->numero();
-        }
-};
-
-class OrdenaArticulos: std::binary_function<Articulo*, Articulo*, bool> {
-
-    public:
-        bool operator()(const Articulo* articulo1, const Articulo* articulo2) const {
-            return articulo1->referencia() < articulo2->referencia();
-        }
-};
 
 
 class Pedido_Articulo {

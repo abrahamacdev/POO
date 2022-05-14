@@ -19,47 +19,48 @@ class Pedido {
         class Vacio {
 
             public:
-                Vacio(const Usuario& usuario): usuario_(&usuario){}
+                Vacio(Usuario& usuario): usuario_(&usuario){}
 
-                inline const Usuario& usuario() const { return *usuario_; };
+                Usuario& usuario() const { return *usuario_; };
 
             private:
-                const Usuario* usuario_;
+                Usuario* usuario_;
         };
 
         class Impostor{
 
             public:
-                Impostor(const Usuario& usuario): usuario_(&usuario){}
+                Impostor(Usuario& usuario): usuario_(&usuario){}
 
-                inline const Usuario& usuario() const { return *usuario_; };
+                Usuario& usuario() const { return *usuario_; };
 
             private:
-                const Usuario* usuario_;
+                Usuario* usuario_;
         };
 
         class SinStock{
 
             public:
-                SinStock(const Articulo* articulo): articulo_(articulo){}
+                SinStock(Articulo* articulo): articulo_(articulo){}
 
-                inline const Articulo& articulo() const { return *articulo_; };
+                Articulo& articulo() const {
+                    return *articulo_;
+                };
 
             private:
-                const Articulo* articulo_;
+                Articulo* articulo_;
         };
 
 
-        Pedido(const Usuario_Pedido& usuarioPedido, const Pedido_Articulo& pedidoArticulo, const Usuario& cliente,
-               const Tarjeta& tarjeta, const Fecha& fecha = Fecha());
+        Pedido(Usuario_Pedido& usuarioPedido, Pedido_Articulo& pedidoArticulo, Usuario& cliente, const Tarjeta& tarjeta, const Fecha& fecha = Fecha());
 
 
         // Observadores
-        inline int numero() const { return num_; };
-        inline const Tarjeta* tarjeta() const { return tarjeta_; };
-        inline const Fecha& fecha() const { return fecha_; };
-        inline double total() const { return total_; };
-        inline static int n_total_pedidos() { return N_pedidos; };      // Del atributo estático
+        int numero() const { return num_; };
+        const Tarjeta* tarjeta() const { return tarjeta_; };
+        const Fecha& fecha() const { return fecha_; };
+        double total() const { return total_; };
+        static int n_total_pedidos() { return N_pedidos; };      // Del atributo estático
 
     private:
         int num_;

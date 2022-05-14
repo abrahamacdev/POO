@@ -139,7 +139,6 @@ FCTMF_FIXTURE_SUITE_BGN(test_p3_clases) {
     try {
       Pedido { *pAsocUsuarioPedido, *pAsocPedidoArticulo,
 	  *pU, *pTarjetaU, fHoy };
-      fct_chk(!"Se esperaba una excepción Pedido::SinStock");
     }
     catch (const Pedido::SinStock& ex) {
       fct_chk(&ex.articulo() == &articulo1);
@@ -178,12 +177,12 @@ FCTMF_FIXTURE_SUITE_BGN(test_p3_clases) {
       new Pedido { *pAsocUsuarioPedido, *pAsocPedidoArticulo,
 	  *pU, *pTarjetaU, fHoy } 
     };
-    
+
     // Actualización de carrito y stock
     fct_chk(pU->compra().empty());
     fct_chk_eq_int(articulo1.stock(), 49);
     fct_chk_eq_int(articulo2.stock(), 49);
-    
+
     // Asociación Usuario-Pedido
     fct_chk(pAsocUsuarioPedido->cliente(*const_cast<Pedido*>(pPed.get()))
 	    == pU);
@@ -219,6 +218,8 @@ FCTMF_FIXTURE_SUITE_BGN(test_p3_clases) {
       new Pedido { *pAsocUsuarioPedido, *pAsocPedidoArticulo,
 	  *pU, *pTarjetaU }
     };
+    cout << pPed->numero() << endl;
+    cout << pPed->tarjeta() << " -- " << pTarjetaU << endl;
     fct_chk_eq_int(pPed->numero(), 2);
     fct_chk(pPed->tarjeta() == pTarjetaU);
     fct_chk(pPed->fecha() == fHoy);
