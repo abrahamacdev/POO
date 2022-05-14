@@ -10,7 +10,7 @@
 #include "usuario.hpp"
 
 class Usuario_Pedido;
-class pedido_articulo;
+class Pedido_Articulo;
 
 class Pedido {
 
@@ -19,9 +19,9 @@ class Pedido {
         class Vacio {
 
             public:
-                Vacio(const Usuario* usuario): usuario_(usuario){}
+                Vacio(const Usuario& usuario): usuario_(&usuario){}
 
-                inline const Usuario* usuario() const { return usuario_; };
+                inline const Usuario& usuario() const { return *usuario_; };
 
             private:
                 const Usuario* usuario_;
@@ -30,9 +30,9 @@ class Pedido {
         class Impostor{
 
             public:
-                Impostor(const Usuario* usuario): usuario_(usuario){}
+                Impostor(const Usuario& usuario): usuario_(&usuario){}
 
-                inline const Usuario* usuario() const { return usuario_; };
+                inline const Usuario& usuario() const { return *usuario_; };
 
             private:
                 const Usuario* usuario_;
@@ -43,15 +43,15 @@ class Pedido {
             public:
                 SinStock(const Articulo* articulo): articulo_(articulo){}
 
-                inline const Articulo* articulo() const { return articulo_; };
+                inline const Articulo& articulo() const { return *articulo_; };
 
             private:
                 const Articulo* articulo_;
         };
 
 
-        Pedido(const Usuario_Pedido& usuarioPedido, const pedido_articulo& pedidoArticulo, const Usuario* cliente,
-               const Tarjeta* tarjeta, const Fecha& fecha = Fecha());
+        Pedido(const Usuario_Pedido& usuarioPedido, const Pedido_Articulo& pedidoArticulo, const Usuario& cliente,
+               const Tarjeta& tarjeta, const Fecha& fecha = Fecha());
 
 
         // Observadores

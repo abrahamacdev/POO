@@ -2,7 +2,7 @@
 // Created by poo on 13/5/22.
 //
 
-#include "pedido_articulo.hpp"
+#include "pedido-articulo.hpp"
 #include "iomanip"
 
 // ----- LineaPedido -----
@@ -16,7 +16,7 @@ std::ostream& operator << (std::ostream& os, const LineaPedido& lineaPedido){
 
 
 // ----- Pedido_Articulo -----
-void pedido_articulo::pedir(Pedido& pedido, Articulo& articulo, double precio, unsigned int cantidad){
+void Pedido_Articulo::pedir(Pedido& pedido, Articulo& articulo, double precio, unsigned int cantidad){
 
     LineaPedido lineaPedido(precio, cantidad);
 
@@ -24,11 +24,11 @@ void pedido_articulo::pedir(Pedido& pedido, Articulo& articulo, double precio, u
     articulo_pedido[&articulo].insert(std::make_pair(&pedido, lineaPedido));
 }
 
-void pedido_articulo::pedir(Articulo& articulo, Pedido& pedido, double precio, unsigned int cantidad){
+void Pedido_Articulo::pedir(Articulo& articulo, Pedido& pedido, double precio, unsigned int cantidad){
     pedir(pedido, articulo, precio, cantidad);
 }
 
-std::ostream &pedido_articulo::mostrarDetallePedidos(std::ostream &os) {
+std::ostream &Pedido_Articulo::mostrarDetallePedidos(std::ostream &os) {
 
     double total = 0.0;
 
@@ -47,7 +47,7 @@ std::ostream &pedido_articulo::mostrarDetallePedidos(std::ostream &os) {
     return os;
 }
 
-std::ostream &pedido_articulo::mostrarVentasArticulos(std::ostream &os) {
+std::ostream &Pedido_Articulo::mostrarVentasArticulos(std::ostream &os) {
 
     for (auto i=articulo_pedido.begin(); i != articulo_pedido.end(); i++) {
 
@@ -60,7 +60,7 @@ std::ostream &pedido_articulo::mostrarVentasArticulos(std::ostream &os) {
 // ---------------------------
 
 
-std::ostream& operator << (std::ostream& os, const pedido_articulo::ItemsPedido& itemsPedido){
+std::ostream& operator << (std::ostream& os, const Pedido_Articulo::ItemsPedido& itemsPedido){
 
     double total = 0.0;
 
@@ -80,7 +80,7 @@ std::ostream& operator << (std::ostream& os, const pedido_articulo::ItemsPedido&
     return os << "Total\t\t" << std::fixed << std::setprecision(2) << total << " €";
 }
 
-std::ostream& operator << (std::ostream& os, const pedido_articulo::Pedidos& pedidos){
+std::ostream& operator << (std::ostream& os, const Pedido_Articulo::Pedidos& pedidos){
 
     double total = 0.0;
     unsigned int cantidad = 0;

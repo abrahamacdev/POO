@@ -27,20 +27,22 @@ std::ostream& operator << (std::ostream& os, const LineaPedido& lineaPedido);
 
 class OrdenaPedidos: std::binary_function<Pedido*, Pedido*, bool> {
 
-    bool operator()(const Pedido* pedido1, const Pedido* pedido2) const {
-        return pedido1->numero() < pedido2->numero();
-    }
+    public:
+        bool operator()(const Pedido* pedido1, const Pedido* pedido2) const {
+            return pedido1->numero() < pedido2->numero();
+        }
 };
 
 class OrdenaArticulos: std::binary_function<Articulo*, Articulo*, bool> {
 
-    bool operator()(const Articulo* articulo1, const Articulo* articulo2) const {
-        return articulo1->referencia() < articulo2->referencia();
-    }
+    public:
+        bool operator()(const Articulo* articulo1, const Articulo* articulo2) const {
+            return articulo1->referencia() < articulo2->referencia();
+        }
 };
 
 
-class pedido_articulo {
+class Pedido_Articulo {
 
     public:
         typedef std::map<Articulo*, LineaPedido, OrdenaArticulos> ItemsPedido;
@@ -60,8 +62,8 @@ class pedido_articulo {
         std::map<Articulo*, Pedidos, OrdenaArticulos> articulo_pedido;
 };
 
-std::ostream& operator << (std::ostream& os, const pedido_articulo::ItemsPedido& itemsPedido);
-std::ostream& operator << (std::ostream& os, const pedido_articulo::Pedidos& pedidos);
+std::ostream& operator << (std::ostream& os, const Pedido_Articulo::ItemsPedido& itemsPedido);
+std::ostream& operator << (std::ostream& os, const Pedido_Articulo::Pedidos& pedidos);
 
 
 #endif //ALVAREZ_CRUZ_ABRAHAM_PEDIDO_ARTICULO_HPP

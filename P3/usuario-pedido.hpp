@@ -2,8 +2,8 @@
 // Created by poo on 13/5/22.
 //
 
-#ifndef ALVAREZ_CRUZ_ABRAHAM_USUARIO_PEDIDO_H
-#define ALVAREZ_CRUZ_ABRAHAM_USUARIO_PEDIDO_H
+#ifndef ALVAREZ_CRUZ_ABRAHAM_USUARIO_PEDIDO_HPP
+#define ALVAREZ_CRUZ_ABRAHAM_USUARIO_PEDIDO_HPP
 
 #include "pedido.hpp"
 #include "usuario.hpp"
@@ -26,4 +26,4 @@ class Usuario_Pedido {
 };
 
 
-#endif //ALVAREZ_CRUZ_ABRAHAM_USUARIO_PEDIDO_H
+#endif //ALVAREZ_CRUZ_ABRAHAM_USUARIO_PEDIDO_HPP

@@ -5,26 +5,28 @@
 #include "pedido.hpp"
 #include "iomanip"
 
-Pedido::Pedido(const Usuario_Pedido &usuarioPedido, const pedido_articulo &pedidoArticulo, const Usuario *cliente,
-               const Tarjeta *tarjeta, const Fecha &fecha): num_(++N_pedidos), tarjeta_(tarjeta), fecha_(fecha), total_(0.0){
+int Pedido::N_pedidos = 0;
+
+Pedido::Pedido(const Usuario_Pedido &usuarioPedido, const Pedido_Articulo &pedidoArticulo, const Usuario& cliente,
+               const Tarjeta& tarjeta, const Fecha &fecha): num_(++N_pedidos), tarjeta_(&tarjeta), fecha_(fecha), total_(0.0){
 
     // TODO Llamar a la correspondiente funcioón de pedidoArticulo (pág 4)
     // El carrito está vacío
     //if (pedidoArticulo.vacio()) throw Pedido::Vacio(cliente);
 
     // El titular de la tarjeta no coincide con el cliente que hace el pedido
-    if (tarjeta->titular() != cliente) throw Pedido::Impostor(cliente);
+    if (tarjeta.titular() != &cliente) throw Pedido::Impostor(cliente);
 
     // TODO Llamar a las correspondientes funciones de pedidoArticulo y usuarioPedido (pág 5)
     // Algún artículo del carrito supera las existencias en almacén
 
     // Comprobamos si la tarjeta está caducada
-    if (tarjeta->caducidad() < fecha){
+    if (tarjeta.caducidad() < fecha){
 
     }
 
     // Comprobamos que la tarjeta esté activa
-    if (!tarjeta->activa()) throw Tarjeta::Desactivada{};
+    if (!tarjeta.activa()) throw Tarjeta::Desactivada{};
 
 
 };
