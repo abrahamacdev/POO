@@ -218,8 +218,6 @@ FCTMF_FIXTURE_SUITE_BGN(test_p3_clases) {
       new Pedido { *pAsocUsuarioPedido, *pAsocPedidoArticulo,
 	  *pU, *pTarjetaU }
     };
-    cout << pPed->numero() << endl;
-    cout << pPed->tarjeta() << " -- " << pTarjetaU << endl;
     fct_chk_eq_int(pPed->numero(), 2);
     fct_chk(pPed->tarjeta() == pTarjetaU);
     fct_chk(pPed->fecha() == fHoy);

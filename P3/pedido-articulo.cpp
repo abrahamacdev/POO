@@ -4,6 +4,7 @@
 
 #include "pedido-articulo.hpp"
 #include "iomanip"
+#include "locale"
 
 // ----- LineaPedido -----
 LineaPedido::LineaPedido(double precio_venta, unsigned int cantidad): precio_venta_(precio_venta), cantidad_(cantidad){}
@@ -32,12 +33,15 @@ std::ostream &Pedido_Articulo::mostrarDetallePedidos(std::ostream &os) {
 
     for (auto i=pedido_articulo.begin(); i != pedido_articulo.end(); i++) {
 
-        os << "Pedido núm. " << i->first->numero() << std::endl;
-        os << "Cliente: " << i->first->tarjeta()->titular()->nombre();
-        os << "\t\t\t Fecha: " << i->first->fecha() << std::endl;
-        os << i->second;
+        Pedido* pedido = i->first;
+        const ItemsPedido& itemsPedido = detalle(*pedido);
 
-        total += i->first->total();
+        os << "Pedido núm. " << pedido->numero() << std::endl;
+        os << "Cliente: " << pedido->tarjeta()->titular()->nombre();
+        os << "\t\t\t Fecha: " << pedido->fecha() << std::endl;
+        os <<  itemsPedido;
+
+        total += pedido->total();
     }
 
     os << "TOTAL VENTAS \t\t\t " << std::fixed << std::setprecision(2) << total << " €" << std::endl;
@@ -49,8 +53,11 @@ std::ostream &Pedido_Articulo::mostrarVentasArticulos(std::ostream &os) {
 
     for (auto i=articulo_pedido.begin(); i != articulo_pedido.end(); i++) {
 
-        os << "Ventas de" << (i->first)->referencia() << "] \"" << i->first->titulo() << "\"";
-        os << i->second << std::endl;
+        Articulo* articulo = i->first;
+        const Pedidos& pedidos = ventas(*articulo);
+
+        os << "Ventas de [" << articulo->referencia() << "] \"" << articulo->titulo() << "\"";
+        os << pedidos << std::endl;
     }
 
     return os;
@@ -62,20 +69,19 @@ std::ostream& operator << (std::ostream& os, const Pedido_Articulo::ItemsPedido&
 
     double total = 0.0;
 
-    os << std::endl;
-    os << std::setfill(' ') << std::setw(50) << " PVP\tCantidad\t\tArtículo" << std::endl;
-    os << std::setfill('=') << std::setw(50) << std::endl;
+    os << " PVP \t Cantidad \t\t Artículo" << std::endl;
+    os << std::setw(50) << std::setfill('=') << "" << std::endl;
 
     for(auto i=itemsPedido.begin(); i != itemsPedido.end(); i++){
-        os << std::fixed << std::setprecision(2) << i->second.precio_venta() << " € ";
-        os << i->second.cantidad() << "\t\t";
-        os << "[" << i->first->referencia() << "] \"" << i->first->titulo() << "\"" << std::endl;
+        os << std::setw(5) << std::left << std::setfill(' ') << std::fixed << std::setprecision(2) << i->second.precio_venta() << " €  ";
+        os << std::setw(8) << i->second.cantidad() << " \t\t ";
+        os <<  "[" << i->first->referencia() << "] \"" << i->first->titulo() << "\"" << std::endl;
 
         total += i->second.precio_venta() * i->second.cantidad();
     }
 
-    os << std::setfill('=') << std::setw(50) << std::endl;
-    return os << "Total\t\t" << std::fixed << std::setprecision(2) << total << " €";
+    os << std::setw(50) << std::setfill('=') << "" << std::endl;
+    return os << "Total\t" << std::fixed << std::setprecision(2) << total << " €" << std::endl << std::endl;
 }
 
 std::ostream& operator << (std::ostream& os, const Pedido_Articulo::Pedidos& pedidos){
@@ -85,10 +91,10 @@ std::ostream& operator << (std::ostream& os, const Pedido_Articulo::Pedidos& ped
 
     os << std::endl;
     os << std::setfill(' ') << std::setw(50) << " PVP \t Cant. \t Fecha venta" << std::endl;
-    os << std::setfill('=') << std::setw(50) << std::endl;
+    os << std::setw(50) << std::setfill('=') << "" << std::endl;
 
     for(auto i=pedidos.begin(); i != pedidos.end(); i++){
-        os << std::fixed << std::setprecision(2) << i->second.precio_venta() << " € \t ";
+        os << " " << i->second.precio_venta() << " € \t ";
         os << i->second.cantidad() << " \t ";
         os << i->first->fecha() << std::endl;
 
@@ -96,6 +102,6 @@ std::ostream& operator << (std::ostream& os, const Pedido_Articulo::Pedidos& ped
         cantidad += i->second.cantidad();
     }
 
-    os << std::setfill('=') << std::setw(50) << std::endl;
-    return os << std::fixed << std::setprecision(2) << total << " €" << "\t\t\t" << cantidad;
+    os << std::setw(50) << std::setfill('=') << "" << std::endl;
+    return os << std::fixed << std::setprecision(2) << total << " €" << "\t\t" << cantidad;
 }

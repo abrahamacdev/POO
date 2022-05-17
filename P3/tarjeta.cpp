@@ -138,13 +138,12 @@ std::ostream& operator<<(std::ostream &os, const Tarjeta& tarjeta) {
 
 std::ostream& operator << (std::ostream& os, const Tarjeta::Tipo& tipo){
     switch(tipo){
-        case 0: os << "Otro" ; break;
+        case 0: os << "Tipo indeterminado" ; break;
         case 1: os << "VISA" ; break ;
         case 2: os << "Mastercard"; break ;
         case 3: os << "Maestro"; break ;
         case 4: os << "JCB" ; break ;
         case 5: os << "AmericanExpress" ; break ;
-        default: os << "Otra"; break ;
     }
 
     return os ;
