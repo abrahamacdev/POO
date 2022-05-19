@@ -45,11 +45,19 @@ class Pedido_Articulo {
         void pedir(Pedido& pedido, Articulo& articulo, double precio, unsigned int cantidad = 1);
         void pedir(Articulo& articulo, Pedido& pedido, double precio, unsigned int cantidad = 1);
 
-        inline const ItemsPedido& detalle(Pedido& pedido) { return pedido_articulo[&pedido]; };
-        inline const Pedidos& ventas(Articulo& articulo) { return articulo_pedido[&articulo]; };
+        inline ItemsPedido detalle(Pedido& pedido) const {
+            auto it = pedido_articulo.find(&pedido);
+            if (it != pedido_articulo.end()) return it->second;
+            return ItemsPedido();
+        };
+        inline Pedidos ventas(Articulo& articulo) const {
+            auto it = articulo_pedido.find(&articulo);
+            if (it != articulo_pedido.end()) return it->second;
+            return Pedidos();
+        };
 
-        std::ostream& mostrarDetallePedidos(std::ostream& os);
-        std::ostream& mostrarVentasArticulos(std::ostream& os);
+        void mostrarDetallePedidos(std::ostream& os);
+        void mostrarVentasArticulos(std::ostream& os);
 
     private:
         std::map<Pedido*, ItemsPedido, OrdenaPedidos> pedido_articulo;

@@ -27,40 +27,35 @@ void Pedido_Articulo::pedir(Articulo& articulo, Pedido& pedido, double precio, u
     pedir(pedido, articulo, precio, cantidad);
 }
 
-std::ostream &Pedido_Articulo::mostrarDetallePedidos(std::ostream &os) {
+void Pedido_Articulo::mostrarDetallePedidos(std::ostream &os) {
 
     double total = 0.0;
 
     for (auto i=pedido_articulo.begin(); i != pedido_articulo.end(); i++) {
 
         Pedido* pedido = i->first;
-        const ItemsPedido& itemsPedido = detalle(*pedido);
 
         os << "Pedido núm. " << pedido->numero() << std::endl;
         os << "Cliente: " << pedido->tarjeta()->titular()->nombre();
         os << "\t\t\t Fecha: " << pedido->fecha() << std::endl;
-        os <<  itemsPedido;
+        os <<  detalle(*(i->first));
 
         total += pedido->total();
     }
 
     os << "TOTAL VENTAS \t\t\t " << std::fixed << std::setprecision(2) << total << " €" << std::endl;
-
-    return os;
 }
 
-std::ostream &Pedido_Articulo::mostrarVentasArticulos(std::ostream &os) {
+void Pedido_Articulo::mostrarVentasArticulos(std::ostream &os) {
 
     for (auto i=articulo_pedido.begin(); i != articulo_pedido.end(); i++) {
 
         Articulo* articulo = i->first;
-        const Pedidos& pedidos = ventas(*articulo);
 
         os << "Ventas de [" << articulo->referencia() << "] \"" << articulo->titulo() << "\"";
-        os << pedidos << std::endl;
+        os << ventas(*(i->first)) << std::endl;
     }
 
-    return os;
 }
 // ---------------------------
 
