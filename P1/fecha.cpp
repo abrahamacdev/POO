@@ -210,14 +210,10 @@ Cadena Fecha::anio2Cadena() const{
 
 // --- Operadores ---
 Fecha Fecha::operator+(int d) const {
-    Fecha temp(*this);
-    temp += d;
-    return temp;
+    return Fecha(*this) += d;
 }
 Fecha Fecha::operator-(int d) const {
-    Fecha temp(*this);
-    temp += -d;
-    return temp;
+    return Fecha(*this) += -d;
 }
 Fecha& Fecha::operator+=(int d) {
 
@@ -261,21 +257,21 @@ bool operator==(const Fecha& f1, const Fecha& f2) {
     return (f1.anno() == f2.anno()) && (f1.mes() == f2.mes()) && (f1.dia() == f2.dia());
 }
 bool operator<(const Fecha& f1, const Fecha& f2) {
-    return f2 > f1;
+    if(f1.anno() < f2.anno()) return true;
+    else if (f1.anno() == f2.anno()){
+        if (f1.mes() == f2.mes()) return f1.dia() < f2.dia();
+        else return f1.mes() < f2.mes();
+    }
+    return false;
 }
 bool operator>(const Fecha& f1, const Fecha& f2) {
-    if(f1.anno() > f2.anno()) return true;
-    else if (f1.anno() == f2.anno()){
-        if (f1.mes() == f2.mes()) return f1.dia() > f2.dia();
-        else return f1.mes() > f2.mes();
-    }
-    else return false;
+    return f2 < f1;
 }
 bool operator<=(const Fecha& f1, const Fecha &f2)  {
-    return f1 < f2 || f1 == f2;
+    return !(f2 < f1);
 }
 bool operator>=(const Fecha& f1, const Fecha &f2) {
-    return f1 > f2 || f1 == f2;
+    return !(f1 < f2);
 }
 bool operator!=(const Fecha& f1, const Fecha &f2) {
     return !(f1 == f2);
