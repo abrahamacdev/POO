@@ -44,8 +44,6 @@ Clave::Clave(const char *contrasenia) {
         // Guardamos la contraseña cifrada
         contrasenia_ = Cadena(encriptada);
 
-        // TODO Eliminar
-        std::cout << std::endl << contrasenia << " -- " << contrasenia_  << "[" << salt[0] << ", " << salt[1] << "]" << std::endl;
     }
 }
 

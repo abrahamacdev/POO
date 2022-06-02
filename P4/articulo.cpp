@@ -56,7 +56,7 @@ Libro::Libro(const Autores& autores, const Cadena &referencia, const Cadena &tit
              unsigned int n_pag, unsigned int stock): ArticuloAlmacenable(autores, referencia, titulo, publicacion, precio, stock), n_pag_(n_pag){};
 
 void Libro::impresion_especifica(std::ostream &os) const {
-    os << n_pag_ << " págs., " << stock() << " unidades.";
+    os << n_pag_ << " págs., " << stock_ << " unidades.";
 }
 // -----------------
 
@@ -67,7 +67,7 @@ Cederron::Cederron(const Autores& autores, const Cadena &referencia, const Caden
                    unsigned int tam, unsigned int stock): ArticuloAlmacenable(autores, referencia, titulo, publicacion, precio, stock), tam_(tam) {}
 
 void Cederron::impresion_especifica(std::ostream &os) const {
-    os << tam_ << " MB, " << stock() << " unidades.";
+    os << tam_ << " MB, " << stock_ << " unidades.";
 }
 // --------------------
 
@@ -75,9 +75,9 @@ void Cederron::impresion_especifica(std::ostream &os) const {
 
 // ----- Libro Digital -----
 LibroDigital::LibroDigital(const Autores& autores, const Cadena &referencia, const Cadena &titulo, const Fecha &publicacion, double precio,
-                           const Fecha &expiracion): Articulo(autores, referencia, titulo, publicacion, precio), expiracion_(expiracion) {
+                           const Fecha &expiracion): Articulo(autores, referencia, titulo, publicacion, precio), f_expir_(expiracion) {
 }
 void LibroDigital::impresion_especifica(std::ostream &os) const {
-    os << "A la venta hasta el " << expiracion_ << ".";
+    os << "A la venta hasta el " << f_expir_ << ".";
 }
 // -------------------------

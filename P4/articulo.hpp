@@ -17,9 +17,9 @@ class Autor {
         Autor(const Cadena& nombre, const Cadena& apellidos, const Cadena& direccion) noexcept;
 
         // Observadores
-        inline const Cadena& nombre() const { return nombre_; };
-        inline const Cadena& apellidos() const { return apellidos_; };
-        inline const Cadena& direccion() const { return direccion_; };
+        inline const Cadena& nombre() const noexcept { return nombre_; };
+        inline const Cadena& apellidos() const noexcept { return apellidos_; };
+        inline const Cadena& direccion() const noexcept { return direccion_; };
 
     private:
         Cadena nombre_, apellidos_, direccion_;
@@ -69,12 +69,12 @@ class LibroDigital: public Articulo {
         LibroDigital(const Autores& autores, const Cadena& referencia, const Cadena& titulo, const Fecha& publicacion, double precio, const Fecha& expiracion);
 
         // Observadores
-        inline const Fecha& f_expir() const { return expiracion_; };
+        inline const Fecha& f_expir() const { return f_expir_; };
 
         virtual void impresion_especifica(std::ostream& os) const;
 
     private:
-        const Fecha expiracion_;
+        const Fecha f_expir_;
 
 };
 
@@ -92,7 +92,7 @@ class ArticuloAlmacenable: public Articulo{
 
         virtual ~ArticuloAlmacenable(){};
 
-    private:
+    protected:
         unsigned int stock_;
 };
 
