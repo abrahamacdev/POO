@@ -23,19 +23,19 @@ Clave::Clave(const char *contrasenia) {
 
     // *IMPORTANTE*
     // Tras mucho tiempo, descubrí que a veces obtenemos un salt inválido para encriptar (creo que es porque no coge caracteres del
-    // vector de arriba, raro pero es lo que me pasaba).
+    // vector de arriba, raro pero es lo que me pasaba). Al usar un salt inválido, la salida crypt() es "*0"
     // COn este bucle conseguimos asegurarnos que tendremos un salt válido
-    char* encriptada;
+
     char salt[2];
     do {
 
         // Generamos el salt de manera aleatoria
         salt[0] = caracteres[dist(dev)];
         salt[1] = caracteres[dist(dev)];
-        encriptada = crypt(contrasenia, salt);
 
-    } while (strcmp(encriptada, "*0") == 0);
+    } while ((int) salt[0] == 0 || (int) salt[1] == 0);
 
+    char* encriptada = crypt(contrasenia, salt);
 
     // No se ha podido cifrar la clave
     if (encriptada == nullptr) throw Incorrecta(ERROR_CRYPT);
