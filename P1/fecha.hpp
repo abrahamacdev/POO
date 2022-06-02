@@ -7,8 +7,6 @@
 
 #include <climits>
 #include "ctime"
-#include "stdio.h"
-#include "cstring"
 #include "iostream"
 
 #include "cadena.hpp"

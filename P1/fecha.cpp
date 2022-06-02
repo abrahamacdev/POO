@@ -3,6 +3,8 @@
 //
 
 #include "./fecha.hpp"
+#include "cstdio"
+#include "cstring"
 
 // --- Fecha::Utilidades ---
 int Fecha::Utilidades::diaActual(){
@@ -209,12 +211,6 @@ Cadena Fecha::anio2Cadena() const{
 
 
 // --- Operadores ---
-Fecha Fecha::operator+(int d) const {
-    return Fecha(*this) += d;
-}
-Fecha Fecha::operator-(int d) const {
-    return Fecha(*this) += -d;
-}
 Fecha& Fecha::operator+=(int d) {
 
     struct tm fechaTM = {};
@@ -231,6 +227,12 @@ Fecha& Fecha::operator+=(int d) {
     validar();
 
     return *this;
+}
+Fecha Fecha::operator+(int d) const {
+    return Fecha(*this) += d;
+}
+Fecha Fecha::operator-(int d) const {
+    return Fecha(*this) += -d;
 }
 Fecha& Fecha::operator-=(int d) {
     return *this += -d;;

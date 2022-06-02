@@ -18,8 +18,8 @@
 # más luhn.cpp. Véanse las instrucciones de entrega en el enunciado.
 NA = $(shell dirname ${PWD})
 AP1_AP2_N = $(notdir ${NA})
-#P := $(shell basename ${PWD})
-P := P4
+P := $(shell basename ${PWD})
+#P := P4
 
 # DIRFECHCAD es el directorio donde están las cabeceras, fuentes o módulos
 # objeto de las clases Cadena y Fecha de P1, y su Makefile.
