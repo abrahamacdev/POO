@@ -140,7 +140,7 @@ Cadena& Cadena::operator=(const char* c2){
     s_ = new char[tam_ +1];
 
     // Copiamos el contenido de la cadena
-    strcpy(s_,c2) ;
+    strcpy(s_,c2);
     return *this;
 }
 Cadena& Cadena::operator=(Cadena&& c2)  noexcept {

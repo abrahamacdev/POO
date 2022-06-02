@@ -33,7 +33,7 @@ public:
     Clave(const char* contrasenia);
 
     bool verifica(const char* c) const;
-    inline const Cadena& clave() const { return contrasenia_; };
+    inline Cadena clave() const { return contrasenia_; };
 
 private:
     Cadena contrasenia_;

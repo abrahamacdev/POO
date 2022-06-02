@@ -12,7 +12,7 @@
 Clave::Clave(const char *contrasenia) {
 
     // Conjunto de caracteres que se usarán para el salt
-    static const char* caracteres = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./"};
+    static const char caracteres[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./";
 
     // Comprobamos que la contraseña tenga al menos 5 caracteres
     if (strlen(contrasenia) < 5) throw Clave::Incorrecta(Razon::CORTA);
@@ -21,19 +21,36 @@ Clave::Clave(const char *contrasenia) {
     std::random_device dev;
     std::uniform_int_distribution<int> dist(0,strlen(caracteres)); // Distribución en el rango [0, #len(caracteres)]
 
-    // Generamos el salt de manera aleatoria
-    char salt[2] = {caracteres[dist(dev)], caracteres[dist(dev)]};
+    // *IMPORTANTE*
+    // Tras mucho tiempo, descubrí que a veces obtenemos un salt inválido para encriptar (creo que es porque no coge caracteres del
+    // vector de arriba, raro pero es lo que me pasaba).
+    // COn este bucle conseguimos asegurarnos que tendremos un salt válido
+    char* encriptada;
+    char salt[2];
+    do {
+
+        // Generamos el salt de manera aleatoria
+        salt[0] = caracteres[dist(dev)];
+        salt[1] = caracteres[dist(dev)];
+        encriptada = crypt(contrasenia, salt);
+
+    } while (strcmp(encriptada, "*0") == 0);
+
 
     // No se ha podido cifrar la clave
-    if (crypt(contrasenia, salt) == nullptr) throw Incorrecta(ERROR_CRYPT);
+    if (encriptada == nullptr) throw Incorrecta(ERROR_CRYPT);
     else {
+
         // Guardamos la contraseña cifrada
-        contrasenia_ = Cadena(crypt(contrasenia, salt));
+        contrasenia_ = Cadena(encriptada);
+
+        // TODO Eliminar
+        std::cout << std::endl << contrasenia << " -- " << contrasenia_  << "[" << salt[0] << ", " << salt[1] << "]" << std::endl;
     }
 }
 
 bool Clave::verifica(const char *c) const {
-    return strcmp(contrasenia_.c_str(), crypt(c, contrasenia_.c_str())) == 0;
+    return strcmp(crypt(c, contrasenia_.c_str()), contrasenia_.c_str()) == 0;
 }
 // ************************************
 
