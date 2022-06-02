@@ -19,25 +19,21 @@ Clave::Clave(const char *contrasenia) {
 
     // Generador de números aleatorios
     std::random_device dev;
-    std::mt19937 rng(dev());    // Motor usado para la generación del número aleatorio (Mersenne Twister)
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0,strlen(caracteres)); // Distribución en el rango [0, #len(caracteres)]
+    std::uniform_int_distribution<int> dist(0,strlen(caracteres)); // Distribución en el rango [0, #len(caracteres)]
 
     // Generamos el salt de manera aleatoria
-    char salt[2] = {caracteres[dist(rng)], caracteres[dist(rng)]};
-
-    // Ciframos la contraseña con el salt recién generado
-    const char* cifrada = crypt(contrasenia, salt);
+    char salt[2] = {caracteres[dist(dev)], caracteres[dist(dev)]};
 
     // No se ha podido cifrar la clave
-    if (cifrada == nullptr) std::throw_with_nested(Clave::Incorrecta(Razon::ERROR_CRYPT));
+    if (crypt(contrasenia, salt) == nullptr) std::throw_with_nested(Clave::Incorrecta(Razon::ERROR_CRYPT));
     else {
         // Guardamos la contraseña cifrada
-        contrasenia_ = cifrada;
+        contrasenia_ = Cadena(crypt(contrasenia, salt));
     }
 }
 
 bool Clave::verifica(const char *c) const {
-    return strcmp(crypt(c, contrasenia_.c_str()), contrasenia_.c_str()) == 0;
+    return strcmp(contrasenia_.c_str(), crypt(c, contrasenia_.c_str())) == 0;
 }
 // ************************************
 
@@ -108,7 +104,13 @@ void mostrar_carro(std::ostream& os, const Usuario& usuario){
     auto i = usuario.compra().begin();
     while (i != usuario.compra().end()){
 
-        os << std::setw(3) << std::setfill(' ') << i->second << std::setw(4) << std::setfill(' ') <<  *i->first << std::endl;
+        os << std::setw(3) << std::setfill(' ') << i->second << std::setw(4) << std::setfill(' ');
+
+        // Modificado de la P3 para mantener el formato original
+        const Articulo& articulo = *(i->first);
+        os << "[" << std::setw(3) << std::setfill('0') << articulo.referencia() << "] \"" << articulo.titulo() << "\", ";
+        os << articulo.f_publi().anno() << ". " << std::fixed << std::setprecision(2) << articulo.precio() << " €" << std::endl;
+
         i++;
     }
 }

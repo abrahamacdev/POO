@@ -276,6 +276,7 @@ FCTMF_FIXTURE_SUITE_BGN(test_p4) {
   FCT_TEST_END();
 
   FCT_TEST_BGN(LibroDigital - eBook expirado y carrito queda vacio) {
+
     pUsuarioPedido->compra(eBookExpirado, 1);
     fct_chk_ex(Pedido::Vacio, 
 	       Pedido(usuPed, pedArt, *pUsuarioPedido, *pTarjetaPedido));
