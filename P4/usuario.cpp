@@ -25,7 +25,7 @@ Clave::Clave(const char *contrasenia) {
     char salt[2] = {caracteres[dist(dev)], caracteres[dist(dev)]};
 
     // No se ha podido cifrar la clave
-    if (crypt(contrasenia, salt) == nullptr) std::throw_with_nested(Clave::Incorrecta(Razon::ERROR_CRYPT));
+    if (crypt(contrasenia, salt) == nullptr) throw Incorrecta(ERROR_CRYPT);
     else {
         // Guardamos la contraseña cifrada
         contrasenia_ = Cadena(crypt(contrasenia, salt));

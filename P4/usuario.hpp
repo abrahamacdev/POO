@@ -19,19 +19,15 @@ class Tarjeta;
 
 class Clave {
 public:
-    enum Razon {
-        CORTA,
-        ERROR_CRYPT
-    };
+    typedef enum{ CORTA, ERROR_CRYPT } Razon;
 
     class Incorrecta {
-
         Razon razon_;
 
-    public:
-        explicit Incorrecta(const Razon r): razon_(r){};
+        public:
+            explicit Incorrecta(Razon r): razon_(r){};
 
-        inline const Razon& razon() const { return razon_; };
+            inline const Razon& razon() const { return razon_; };
     };
 
     Clave(const char* contrasenia);

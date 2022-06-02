@@ -12,10 +12,14 @@ all: clean-main main_exe
 main_exe: main
 	./$<
 
-main: $(OBJETOS)
+#main: $(OBJETOS)
+#	$(CXX) $(CXXFLAGS) -o $@ $^ -lcrypt
+
+main: main.o luhn.o cadena.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ -lcrypt
 # ---------------------------------------------
 
+clave_fake.o: ../ClaveFake.h
 
 
 
